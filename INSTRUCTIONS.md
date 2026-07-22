@@ -176,4 +176,164 @@ Det finns flera olika händelser som kan hända när ett Mysterium aktiveras. Ne
 
 För att få godkänt ska gruppen implementera någon variant av spelet Omvälvning så som det är beskrivet ovan. De tio bästa resultaten skall presenteras i en highscore-lista där man skall kunna se poängen och namn på den som spelat.
 
-Uppgiften ska implementeras som ett progra
+Uppgiften ska implementeras som ett program i Java med ett GUI (Graphical User Interface) i Swing/AWT. Hur inmatning sker är upp till gruppen att avgöra inom kraven för funktion och implementation nedan. Highscore-listan måste visas efter att ett spel är slut, men kan också visas hela tiden eller visas vid exempelvis ett knapptryck.
+
+Spelplanen representeras av en array med objekt som representerar de pjäser som finns utplacerade och arrayen används för att veta var olika pjäser är positionerade.
+
+För godkänt ska det utöver den körbara källkoden finnas en fil med kompletterande diagram och text enligt krav nedan.
+
+### Krav på funktionalitet för betyg G
+Det program du skapar ska uppfylla följande krav på funktionalitet i programmet:
+
+| Id för krav | Kravbeskrivning |
+| :--- | :--- |
+| **U4FG1** | Applikationen skall ha ett sammanhängande grafiskt gränssnitt. Det vill säga ett huvud-fönster i form av ett JFrame-objekt ska finnas. GUI kan inte endast byggas upp med pop-up-fönster typ JOptionPane. JOptionPane kan däremot användas för enstaka saker som exempelvis felmeddelanden. Terminalen får inte användas för att förmedla information till spelarna. |
+| **U4FG2** | Spelet ska visa en spelplan med minst dimension 8×8 positioner. Spelplanen får vara större och behöver inte heller vara kvadratisk om gruppen så önskar. |
+| **U4FG3** | Det ska vara tydligt om en position är ett Mysterium, ledig, kontrollerad av spelare 1 eller kontrollerad av spelare 2. |
+| **U4FG4** | Överraskningar ska fungera i alla 8 riktningar runt en placerad pjäs. |
+| **U4FG5** | Mysterium ska slumpvis placeras ut på spelplanen. Och får inte röra vid varandra. |
+| **U4FG6** | Vilken typ av Mysterium en position är ska slumpas när banan genereras. |
+| **U4FG7** | Minst 5 Mysterium ska placeras på spelplanen. |
+| **U4FG8** | Mysterium ska kunna ligga längs med kanterna av spelplanen, men inte i något av de fyra hörnen. |
+| **U4FG9** | Minst 3 Mysterium ska vara korrekt implementerade, enligt beskrivningarna ovan. |
+| **U4FG10** | Spelet ska avslutas om det inte finns några lediga platser på spelplanen. |
+| **U4FG11** | Spelet ska avslutas om alla Mysterium har aktiverats. |
+| **U4FG12** | Mysterium ska bara kunna aktiveras en gång. |
+| **U4FG13** | När ett spel är över ska det framgå tydligt vilken spelare som har vunnit, samt hur mycket poäng denna fick. |
+| **U4FG14** | Det ska synas vilken spelares tur det är att placera en pjäs. |
+| **U4FG15** | Spelarnas nuvarande poäng ska synas på skärmen. |
+| **U4FG16** | En spelare ska bara kunna placera en pjäs på en ledig plats som angränsar till en annan pjäs. (Den första pjäsen som vardera spelare ska placera får placeras på valfri plats på spelplanen.) |
+| **U4FG17** | Inmatning kan ske genom att spelaren klickar på en ledig plats eller matar in koordinater i textfält. |
+| **U4FG18** | Det ska finnas en highscore-lista som innehåller namn och antal poäng för de 10 bästa vinnarna av ett spel. |
+| **U4FG19** | Highscore-listan ska vara sorterad i växande ordning med det resultat som fått flest poäng överst. |
+| **U4FG20** | Om antalet poäng som en vinnare fick kvalar in på highscore-listan ska användaren ombes ange ett namn vid spelets slut alternativt att spelaren anger ett namn innan spelet börjar och detta namn används om resultatet kvalar in på highscore-listan. |
+| **U4FG21** | Highscore-listan ska sparas som en textfil i format .txt, (får ej vara i format .dat) mellan olika speltillfällen (programmet behöver läsa in highscore-listan från textfilen vid start eller när informationen ska visas samt skriva en ny lista till textfil vid förändring). |
+| **U4FG22** | Man ska kunna välja att spela ett nytt spel via GUI:t. (Detta får inte göras genom en omstart av applikationen) |
+
+---
+
+### Krav på implementation för betyg G
+Följande krav ställs på din implementation av uppgiften:
+
+| Id för krav | Kravbeskrivning |
+| :--- | :--- |
+| **U4IG1** | Källkoden ska vara väl formaterad med lämplig indentering som presenterats på kursen. |
+| **U4IG2** | Källkoden ska gå att kompilera och exekvera. |
+| **U4IG3** | Alla klasser av typ controller och entity/model ska ha kommentarer enligt Javadoc (se F16 och L18) för:<br>• Varje klass ska ha en beskrivning för klassen (innan klassdeklarationen) som beskriver klassens syfte och ansvarsområden samt en @author-tag.<br>• Alla metoder (oavsett synlighet) ska ha:<br>  - en kort beskrivning av metodens syfte<br>  - @param-taggar för varje parameter som finns (om det finns parametrar)<br>  - @return-tag om det finns ett returvärde<br>  - @author-tag ska alltid finnas och om endast en (1) person skrivit koden i metoden ska endast den personens namn stå i taggen. |
+| **U4IG4** | Uppgiften ska vara löst på rimligt sätt utifrån de verktyg för problemlösning som presenterats på kursen. |
+| **U4IG5** | Samtliga instansvariabler skall vara privata. |
+| **U4IG6** | Applikationen skall ha en strikt MVC/BCE-arkitektur där view/boundary och model/entity inte skall känna till varandra (de ska inte importera varandras paket). Enum är undantagna från detta då de ofta används av både view- och model-klasser. |
+| **U4IG7** | Minst ett av följande koncept ska användas i lösningen för att bygga en klasstruktur för olika typer av pjäser i spelet:<br>• Ett (1) interface som användas av minst en (1) klass och implementeras av minst två klasser. Exempelvis kan man ha ett interface för saker som överraskar.<br>• En (1) abstrakt klass (måste inte ha en abstrakt metod men kan ha abstrakta metoder om man finner detta lämpligt). |
+| **U4IG8** | Spelplanen ska representeras av en array med referenser till objekt för de olika pjäserna. |
+| **U4IG9** | En ny spelplan skapas varje gång man startar en ny spelomgång. Spelplanen får slumpmässigt placerade Mysterium. |
+
+---
+
+### Krav på diagram för betyg G
+Lösningen ska dokumenteras med ett antal olika diagram. Säkerställ att diagrammen som lämnas in stämmer överens med varandra och den kod som lämnas in. Följande krav ställs på diagrammen:
+
+| Id för krav | Kravbeskrivning |
+| :--- | :--- |
+| **U4DG1** | Alla diagram ska följa den UML-notation som presenterats på kursen. |
+| **U4DG2** | Klassdiagrammet ska visar huvudklassen/klasserna för GUI-delen, dvs. den eller de klasser som anropas av någon klass av typen Control eller som själv anropar en control-klass. Alla control-klasser och alla entity-klasser samt eventuella enums och interface man skapat för uppgiften skall visas i klassdiagrammet. I klass-diagrammet visas även väsentliga klasser från klassbibliotek om dessa nyttjas för någon del av problemlösningen (exempelvis för att öka storleken på en array, sortera en array hitta ett specifikt element eller liknande), detta gäller exempelvis klasser så som ArrayList eller liknande. |
+| **U4DG3** | Klassdiagrammet behöver inte ta hänsyn till att klasserna ligger i olika paket. Alla klasser visas i ett och samma klassdiagram utan paket i diagrammet. |
+| **U4DG4** | De klasser som ska visas i klassdiagrammet ska visas med alla attribut och namn och datatyp/klass för attributen ska visas. Enum-klasser med mer än 5 attribut behöver inte visa attribut i klassdiagrammet. Om någon biblioteksklass (exempelvis ArrayList) används i stor omfattning för funktionalitet ska denna visas i klassdiagrammet med klassnamn men attribut behöver inte visas för biblioteksklasser. Operationer behöver inte visas i klassdiagrammet. |
+| **U4DG5** | För alla klasser i klassdiagrammet ska det anges om klassen är av stereotypen boundary, control eller entity. Enum-klasser anges som stereotyp enum. Interface eller abstrakt klass indikeras också med stereotyper för detta. |
+| **U4DG6** | Associationer mellan klasser i klassdiagrammet ska visas med multiplicitet i bägge ändarna (där detta går att tillämpa) och lämpliga typer av associationer (exempelvis generalisering, aggregation eller komposition - överanvänd dock inte detta). |
+| **U4DG7** | Det ska finnas ett sekvensdiagram som visar vad som sker när användaren har valt att placera en pjäs på en viss position från att ett event triggas i GUI när spelaren anger position att placera på och till och med att GUI:t uppdaterats med resultatet av den placeringen.<br><br>*Tänk igenom din design! Detta sekvensdiagram kan bli mycket stort med en mindre elegant design men med en bra design som väl nyttjar exempelvis polymorfism blir sekvensdiagrammet av mindre omfattning.* |
+| **U4DG8** | I sekvensdiagrammet ska alla parametrar i operationer/metoder visas med namn och datatyp/klass och returvärden ska visas med datatyp/klass. |
+| **U4DG9** | Sekvensdiagrammet ska visa alla anrop som sker mellan klasserna i klassdiagrammet för den aktivitet som sekvensdiagrammet gäller (inklusive relevanta anrop till biblioteksklasser som exempelvis ArrayList). Alla iterationer och selektioner i anropade operationer ska visas i sekvensdiagrammet. Undantag gäller för att visa innehållet i operationer för klasser som hör till klassbibliotek. |
+| **U4DG10** | Sekvensdiagram och klassdiagram måste vara konsistenta – det vill säga de måste stämma överens och om ett anrop sker från ett objekt av klass A till ett objekt av klass B så måste klass A och B vara associerade i klassdiagrammet. |
+| **U4DG11** | Det ska finnas ett aktivitetsdiagram som beskriver hur turomgångar kan hanteras om man har ett Mysterium som innebär att en spelare får extra drag innan nästa spelare får placera igen (oavsett om man implementerat denna typ av Mysterium eller inte).<br><br>*Tänk igenom designen för detta för att smart nyttja hur man styr vems tur det är för att undvika att skriva upprepad kod för att göra ett drag.* |
+| **U4DG12** | Diagrammen ska vara ritade med något verktyg som Visual Paradigm eller liknande och får inte vara en handritad skiss på papper som sedan skannats in. |
+
+---
+
+### Rapport för betyg G
+Följande krav ställs på den rapport som lämnas in vid den skriftliga inlämningen:
+
+| Id för krav | Kravbeskrivning |
+| :--- | :--- |
+| **U4RG1** | Rapporten lämnas in som en pdf-fil med filnamn enligt mönstret `DA339A_U4_rapport_Grupp_XX.pdf`. |
+| **U4RG2** | Rapporten följer den givna strukturen i filen `DA339A_U4_rapport_Grupp_XX.docx`. |
+| **U4RG3** | Texten i rapporten ska hålla ett formellt språk och vara rimligt formaterad och formulerad gällande stavning och grammatik. Texten ska huvudsakligen bestå av redogörande löptext och får inte endast vara korta påståenden eller punktlistor. Du förväntas använda terminologi från kursens innehåll för att beskriva saker relaterat till objektorienterad programmering. |
+| **U4RG4** | Rapporten innehåller en beskrivning av Mysterium som implementerats. Det ska anges vilken typ av konsekvens respektive Mysterium innebär för den spelare som aktiverar den. |
+| **U4RG5** | Rapporten innehåller diagram skapade enligt krav U4DG1-12 |
+| **U4RG6** | Rapporten innehåller en text som beskriver hur man hade kunnat lösa eller har löst att implementera hur turomgångar kan hanteras om man har ett Mysterium som innebär att en spelare får extra drag innan nästa spelare får spela igen (oavsett om man implementerat denna typ av Mysterium eller inte). Textbeskrivningen ska kompletteras med ett aktivitetsdiagram som visar hur man avgör vilken spelares tur det är att spela i nästa runda enligt kraven på funktionalitet och implementation. Textens omfattning ska vara **200–300 ord**. |
+| **U4RG7** | Rapporten innehåller en reflektion och motivering till valet av interface och/eller generalisering med abstrakt klass för att hantera olika typer av implementerade Mysterium. Beskriv era motiv till varför gruppen valde det ena alternativet framför det andra, eller bägge, och vilka fördelar ni såg med det valet. Beskriv även vilka nackdelar valet eventuellt medfört. Motiveringen ska utgå från fördelar och nackdelar kopplade till kodstrukturen/arkitekturen och implementeringen av uppgiften (“det kändes bättre” är inte en tillräckligt bra motivering). Textens omfattning ska vara **300–400 ord**. |
+| **U4RG8** | Rapporten innehåller minst två förberedda frågor till andra grupper att ställa vid den muntliga redovisningen. Dessa frågor ska ha utgångspunkt i utmaningar som gruppens stötte på under det egna arbetet. Exempelvis ”Vi hade problem med att lösa ABC. Hur hanterade ni att lösa ABC när fallet DEF inträffade?” |
+
+---
+
+## Uppgifter för betyg VG
+
+För betyget VG krävs att alla uppgifter för betyget G är tillfredsställande lösta och redovisas tillfredsställande samt att uppgifter för betyget VG nedan är lösta och redovisas tillfredsställande.
+
+Uppgifterna för VG är i stora delar samma som för G men gruppen ska utöver delar för G:
+* Kunna spara under ett pågående spel.
+* Implementera alla varianter av Mysterium.
+* Ge en lösning för en algoritm för en dator-spelare.
+
+För betyg VG krävs utöver den utökade funktionaliteten ovan att det i text och med ett aktivitetsdiagram beskrivs en algoritm för hur en dator-spelare (“AI”) hade kunnat skapas. Antag att den simplaste dator-spelaren har en algoritm som illustreras av följande aktivitetsdiagram:
+
+1. Slumpa fram en position att placera på.
+2. Kontrollera om positionen är ledig.
+    * [Om positionen är upptagen]: Återgå till steg 1.
+    * [Om positionen är ledig]: Gå till steg 3.
+3. Kontrollera om positionen är bredvid en annan pjäs.
+    * [Om positionen inte är bredvid en annan pjäs]: Återgå till steg 1.
+    * [Om pjäsen är bredvid en annan pjäs]: Gå till steg 4.
+4. Placera pjäsen.
+
+Den tänkta dator-spelaren ska ha en bättre strategi än att helt slumpmässigt välja en ledig position på spelplanen (det som visas i det basala flödet ovan). Utöka aktivitetsdiagrammet till att beskriva en algoritm som minst tar hänsyn till punkterna i kraven nedan. Aktivitetsdiagrammet ska visa den utökade algoritmens grundstruktur.
+
+### Krav för betyg VG
+
+| Id för krav | Kravbeskrivning |
+| :--- | :--- |
+| **U4VG1** | Den aktuella spelplanen och ställningen i spelet ska kunna sparas som information i en fil (txt-fil eller dat-fil). Man ska alltså kunna pausa ett pågående spel, stänga programmet och sedan kunna starta programmet igen och fortsätta spela på den sparade spelplanen. Poäng och liknande för respektive spelare ska också sparas så att spelet kan återupptas där man sparade. |
+| **U4VG2** | Gruppen måste implementera alla givna Mysterium. |
+| **U4VG3** | Det ska i rapporten finnas ett aktivitetsdiagram som visar hur en algoritm för en datorspelare fungerar. Aktivitetsdiagrammet ska ha en detaljnivå motsvarande kod för vad som sker i algoritmen (en jämförelse är en aktivitet). Kortare sekvenser av instruktioner kan sammanfattas som en aktivitet. Algoritmen som beskrivs ska prioritera:<br>• Den placering som överraskar flest pjäser.<br>• En placering som överraskar ett Mysterium. |
+| **U4VG4** | Aktivitetsdiagrammet för algoritmen för en datorspelare ska kompletteras med en textbeskrivning som förklarar varför algoritmen skulle ge ett bättre resultat än slumpmässig helt valda positioner i de olika stegen. Texten ska även beskriva vilka förändringar som skulle behövas i lösningen för att man skulle kunna spela en människo-spelare och en datorspelare mot varandra. |
+
+*Diagram som krävs för betyg G ska stämma överens med den implementerade lösningen för VG om denna genomförs.*
+
+---
+
+## Tips och ledning
+
+**Försök inte göra allt med en gång!** Gör bit för bit och räkna med att vissa saker kommer att behöva ändras i din design när du kommit en bit på väg. Bygg upp programmet steg för steg för att ha bättre kontroll på vad som ger dig problem i nuläget. Hårdkoda inte storleken på arrayer utan se till att ha möjlighet att ändra. På så sätt kan man få ett överskådligt problem i början och skala upp det efterhand.
+
+**Glöm inte att spara ditt arbete ofta och ta även backup av det du gör på en plats så fort något fungerar bra.**
+
+Nyttja klassdiagram för att få översikt över dina klasser och börja implementera dem efter hand och undersök hur de behöver relatera till varandra. Vilka klasser är inte beroende av någon annan klass? - börja med att implementera dessa och bygg ut en klass i taget. Skriv gärna små testprogram till din kod som skapar objekt av klasserna och ger dem värde för att testa din kod.
+
+### Om GUI
+Du kan skissa ditt användargränssnitt på ett papper eller ett ritverktyg (eller Powerpoint, Word, Paint, etc.). Gränssnittet skall visa komponenter som hanterar nödvändig input/output. Dessa i sin tur bör ge dig en bild av vilka instansvariabler (och även metoder) du behöver ha i olika klasser. Utifrån detta kan du designa Controller-klassen och GUI-klasserna. Tänk igenom de scenarier som du behöver genomföra i programmet (tänk på hur metoden för CRC-kort fungerar). Vilken information behöver finnas i GUI? Vilken information kan en controller-klass ta fram eller räkna ut givet vad den får från GUI – och vad behöver då skickas till GUI från början? Komplettera din arkitektur efter hand med metoder som behövs för att genomföra de olika scenarierna. Tänk på att du nödvändigtvis inte behöver använda färger eller bilder på spelplanen utan att det går lika bra att använda bokstäver/tecken för att indikera status på olika sätt.
+
+Gör en skiss av hur ni tänker er att GUIt ska fungera för att ta fram en strategi för logiken i programmets kommunikation. Hur GUIt utformas påverkar den övriga strukturen och tvärt om. Den skissen är dock inget som sedan slaviskt måste följas.
+
+Tycker du att det svårt att implementera ett GUI vänta med det tills du har gjort en fungerade spelmotor. Under tiden är det OK att bara mata in och skriva ut resultatet till terminalen. Utskrifterna kan sen vara bra debugghjälp till när du bygger ditt GUI. Det blir också mycket enklare av designa ett GUI när men vet vad som behövs. Skulle ni märka att ni vill/behöver ändra strategi för strukturen när ni gör spelmotorn så är det bara att ändra GUIt för att matcha er nya strategi.
+
+Försök inte få det 100% som ni tänkt från början, utan se till att det fungerar först och putsa på det sen. Passar inte GUI spelmotorn - ändra på GUIt. Det samma gäller om er skiss inte fungerar tillsammans med Swing-komponenterna.
+
+Om man i tittar på program för Sänka skepp eller liknande spel som finns på nätet använder de flesta JButtons för att hantera en spelplan och det är en rimlig lösning. JButtons sättas ihop i en JPanel och använder Grid- eller Flow-layout. En fördel med att använda knappar är man har viss funktionalitet klar i knappen som att låsa, ändra färg och skriva text. Nackdelen är att man är ganska låst till ett speciellt utseende och beteende. Se också L24 för sätt att hantera många knappar eller fält som ska kunna tryckas på.
+
+* Flow layout: https://docs.oracle.com/javase/tutorial/uiswing/layout/flow.html
+* Grid layout: https://docs.oracle.com/javase/tutorial/uiswing/layout/grid.html
+* Grid layout: https://www.geeksforgeeks.org/java-awt-gridlayout-class/
+
+Eftersom vi har en spelplan som är minst 8×8 betyder det att vi skall skapa åtminstone 64 knappar. För att detta inte skall var en oöverstiglig uppgift så kan vi använda for-loopar och populera en matris av knappar. Sök på “create 64 jbutton java” och “java create jbuttons dynamically” för att få lite inspiration. Kom ihåg att göra lösningen konfigurerbar, så börja inte med att generera 64 knappar utan börja med en mindre storlek som 4×4 så blir det lättare att testa och arbeta på.
+
+När matrisen är klar kan ni koppla ihop den med logiken.
+
+### Om logik och kodstruktur
+För att hantera olika typer av pjäser så kan man använda ett interface för de metoder som gäller alla placerade objekt men som kan fungera lite olika. Varje typ – spelarpjäser och Mysterium, representeras sedan av en egen klass som implementerar interfacet. Ett annat tillvägagångssätt är att använda en generell klass/superklass som innehåller det som är gemensamt för alla placerade objekt. Detta kan eventuellt var en abstrakt klass med abstrakta metoder. Varje typ av placerade objekt representeras sedan i form av subklasser.
+
+I den array som representerar spelplanen kan du låta denna vara en array av placerade objekt. På varje position i arrayen som ett placerat objekt ligger har du en referens till det objektet. Om där inte ligger någon pjäs så låter du positionen i arrayen ha värdet null. Vid placering av en pjäs kan du då enkelt avgöra om en överraskning sker eller inte.
+
+En lösning för att hindra att man placerar en pjäs på samma position flera gånger är att om man använder knappar för spelplanen avaktivera (sätta enable till false) knappar som redan använts för placering på en position.
+
+Beroende på hur man vill lösa att man inte ska kunna placera på samma position två gånger så skulle arrayen också kunna användas för att kontrollera om man tidigare placerat på en viss position. Arrayen för spelplanen skulle då kunna bestå av mer generella objekt eller interface som kan svara på om de är en tom position eller om det är en position som redan är upptagen. Det kan då räcka med ett objekt för tom position och ett objekt för upptagen position.
+
+För att jobba med highscore-listan se L24 för tips. Om man behöver förändra highscore-listan så kan det vara enklare att läsa ut hela listan från filen till en array, lägga till det nya resultatet i arrayen och sortera arrayen efter resultat och sedan skriva hela highscore-listan till fil igen, snarare än att hitta och stoppa in en ny rad i filen på rätt plats i förhållande till resultat.
