@@ -1,4 +1,4 @@
-package Model.PlayingField extends MysterySquare;
+package Model.PlayingField;
 
 public class Square {
     
