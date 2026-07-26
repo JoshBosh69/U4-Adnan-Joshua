@@ -1,7 +1,7 @@
 package Model.PlayingField;
 
-public class Square {
-    
+public class Square extends MysterySquare{
+
     public static void main(String[] args) {
         System.out.println("Square is running...");
     }
