@@ -6,8 +6,8 @@ public class Square extends MysterySquare{
         super(value);
     }
 
-    public static void main(String[] args) {
-        System.out.println("Square is running...");
+    public void setSquareValue(int value) {
+        
     }
 
     public void TinmJump() {

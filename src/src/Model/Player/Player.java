@@ -1,7 +1,6 @@
 package Model.Player;
 
 public class Player {
-    private int platerTurn; // used in order to determine which player is currently playings
     private String name;
     private boolean isCurrentlyPlaying = false;
 
@@ -15,6 +14,14 @@ public class Player {
     public boolean getIsCurrentlyPlaying() {
         return isCurrentlyPlaying;
 
+    }
+
+    public void setWinnerrName(String name) {
+        if(name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }else {
+            this.name = name;
+        }
     }
 
 }

@@ -1,7 +1,6 @@
 package View;
 
 import Controller.GameController;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -11,25 +10,29 @@ public class GameView {
     private JFrame frame;
     private JPanel boardPanel;
     private JPanel topPanel;
+    private JPanel winnerPanel;;
     private JButton[][] boardButtons;
+    private JButton submitButton;
     private JLabel statusLabel;
     private JLabel infoLabel;
+    private JTextField textField;
     GameController gameController;
+
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
-        frame = new JFrame("2-Player Game Board");
+        frame = new JFrame("The Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 650); 
         frame.setLayout(new BorderLayout());
 
         topPanel = new JPanel(new GridLayout(2,1));
 
-        infoLabel = new JLabel("Välkommen till Omvälvning. Välj och tryck på en ruta för att placera din första pjäs",SwingConstants.CENTER);
+        infoLabel = new JLabel("Pick square",SwingConstants.CENTER);
         infoLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.add(infoLabel);
 
-        statusLabel = new JLabel("Nuvarande Spelare: Spelare 1", SwingConstants.CENTER);
+        statusLabel = new JLabel("Current Player: Player 1", SwingConstants.CENTER);
         statusLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.add(statusLabel);
 
@@ -68,12 +71,43 @@ public class GameView {
     }
 
     public void updateCurrentPlayer(String currentPlayer) {
-        statusLabel.setText("Nuvarande Spelare: " + currentPlayer);
+        statusLabel.setText("Current Player: " + currentPlayer);
     }
 
     public void updateInfoText(String infoText) {
         infoLabel.setText(infoText);
     }
+
+    public void winnerName() {
+    JFrame winnerFrame = new JFrame("Winner");
+    winnerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    winnerFrame.setSize(300, 150);
+
+    JLabel winnerLabel = new JLabel("Enter name here", SwingConstants.CENTER);
+    JButton submitButton = new JButton("Submit");
+    JTextField textField = new JTextField(20);
+
+    JPanel winnerPanel = new JPanel();
+
+    winnerPanel.add(textField);
+    winnerPanel.add(submitButton);
+    winnerPanel.add(winnerLabel);
+    winnerFrame.add(winnerPanel);
+
+    submitButton.addActionListener(e -> {
+        System.out.println("Submit button clicked");
+        if (textField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(winnerFrame, "Name cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+        }else {
+            String name = textField.getText();
+            gameController.winnerName(name);
+            System.out.println("Winner name set to: " + name);
+            System.exit(0);
+        }
+    });
+
+    winnerFrame.setVisible(true);
+}
 
 
 }
