@@ -2,6 +2,10 @@ package Model.PlayingField;
 
 public class Square extends MysterySquare{
 
+    public Square(int value) {
+        super(value);
+    }
+
     public static void main(String[] args) {
         System.out.println("Square is running...");
     }
