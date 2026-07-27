@@ -4,6 +4,7 @@ public class Player {
     private int platerTurn; // used in order to determine which player is currently playings
     private String name;
     private boolean isCurrentlyPlaying = false;
+    private int amountOfTilesOccupied;
 
     public Player() {
     }
@@ -17,4 +18,7 @@ public class Player {
 
     }
 
+    public void addOccupiedTile() {
+        amountOfTilesOccupied++;
+    }
 }

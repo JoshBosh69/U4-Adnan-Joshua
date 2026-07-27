@@ -1,12 +1,14 @@
 package Controller;
 
 import Model.Player.Player;
+import Model.PlayingField.Tile;
 import View.GameView;
 
 public class GameController {
     private GameView gameView;
     private Player player1;
     private Player player2;
+    private Tile[][] tiles = new Tile[10][10];
 
     public GameController() {
         this.player1 = new Player();
@@ -16,16 +18,39 @@ public class GameController {
 
     }
 
-    public void buttonPressed() {
-        if (player1.getIsCurrentlyPlaying()) {
-            player1.setIsCurrentlyPlaying(false);
-            player2.setIsCurrentlyPlaying(true);
-            gameView.updateCurrentPlayer("Spelare 2");
-        } else {
-            player2.setIsCurrentlyPlaying(false);
-            player1.setIsCurrentlyPlaying(true);
-            gameView.updateCurrentPlayer("Spelare 1");
-        }
+    public void buttonPressed(int row, int col) {
 
+        if (!tiles[row][col].isOccupied()) {
+            if (player1.getIsCurrentlyPlaying()) {
+                tiles[row][col].setOccupied(true);
+
+                player1.addOccupiedTile();
+                player1.setIsCurrentlyPlaying(false);
+                player2.setIsCurrentlyPlaying(true);
+
+
+                gameView.markTile(row, col, "x");
+                gameView.updateCurrentPlayer("Spelare 2");
+                gameView.updateInfoText("Spelare 2 tur att välja");
+
+            } else {
+                tiles[row][col].setOccupied(true);
+
+                player2.addOccupiedTile();
+                player2.setIsCurrentlyPlaying(false);
+                player1.setIsCurrentlyPlaying(true);
+
+
+                gameView.markTile(row, col, "o");
+                gameView.updateCurrentPlayer("Spelare 1");
+                gameView.updateInfoText("Spelare 1 tur att välja");
+            }
+        } else {
+            gameView.updateInfoText("Denna ruta är redan upptagen. Välj en annan ruta.");
+        }
+    }
+
+    public void registerTile(int row, int col) {
+        tiles[row][col] = new Tile(row, col);
     }
 }
