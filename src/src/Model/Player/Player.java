@@ -3,6 +3,7 @@ package Model.Player;
 public class Player {
     private String name;
     private boolean isCurrentlyPlaying = false;
+    private int amountOfTilesOccupied;
 
     public Player() {
     }
@@ -24,4 +25,11 @@ public class Player {
         }
     }
 
+    public int  getAmountOfTilesOccupied() {
+        return amountOfTilesOccupied;
+    }
+
+    public void addOccupiedTile() {
+        amountOfTilesOccupied++;
+    }
 }

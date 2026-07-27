@@ -36,7 +36,6 @@ public class GameView {
         statusLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.add(statusLabel);
 
-
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(10, 10, 2, 2));
         boardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -45,6 +44,9 @@ public class GameView {
 
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
+                int i  = row;
+                int j = col;
+
                 JButton button = new JButton();
                 button.setBackground(Color.WHITE);
                 
@@ -53,8 +55,11 @@ public class GameView {
                 boardButtons[row][col] = button;
                 boardPanel.add(button);
 
+                gameController.registerTile(row, col);
+
                 button.addActionListener(e -> {
-                    gameController.buttonPressed();
+                    gameController.buttonPressed(i, j);
+                    //System.out.println(i + " " +j);
                 });
             }
         }
@@ -110,4 +115,7 @@ public class GameView {
 }
 
 
+    public void markTile(int row, int col, String mark) {
+        boardButtons[row][col].setText(mark);
+    }
 }
