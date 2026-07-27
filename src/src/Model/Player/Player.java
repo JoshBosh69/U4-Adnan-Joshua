@@ -18,6 +18,10 @@ public class Player {
 
     }
 
+    public int  getAmountOfTilesOccupied() {
+        return amountOfTilesOccupied;
+    }
+
     public void addOccupiedTile() {
         amountOfTilesOccupied++;
     }

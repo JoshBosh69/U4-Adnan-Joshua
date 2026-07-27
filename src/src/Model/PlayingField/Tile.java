@@ -1,9 +1,12 @@
 package Model.PlayingField;
 
+import Model.Player.Player;
+
 public class Tile {
     private int xcor;
     private int ycor;
     private boolean isOccupied = false;
+    Player player;
 
     public Tile(int xcor, int ycor) {
         this.xcor = xcor;
@@ -32,6 +35,14 @@ public class Tile {
 
     public void setOccupied(boolean occupied) {
         isOccupied = occupied;
+    }
+
+    public Player getOwner() {
+        return player;
+    }
+
+    public void setOwner(Player player) {
+        this.player = player;
     }
 
 

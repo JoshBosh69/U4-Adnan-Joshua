@@ -33,7 +33,6 @@ public class GameView {
         statusLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.add(statusLabel);
 
-
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(10, 10, 2, 2));
         boardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

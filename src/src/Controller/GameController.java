@@ -15,14 +15,13 @@ public class GameController {
         this.player2 = new Player();
         player1.setIsCurrentlyPlaying(true);
         this.gameView = new GameView(this);
-
     }
 
     public void buttonPressed(int row, int col) {
-
         if (!tiles[row][col].isOccupied()) {
             if (player1.getIsCurrentlyPlaying()) {
                 tiles[row][col].setOccupied(true);
+                tiles[row][col].setOwner(player1);
 
                 player1.addOccupiedTile();
                 player1.setIsCurrentlyPlaying(false);
@@ -33,8 +32,14 @@ public class GameController {
                 gameView.updateCurrentPlayer("Spelare 2");
                 gameView.updateInfoText("Spelare 2 tur att välja");
 
+                //debug
+                System.out.println(tiles[row][col]);
+                System.out.println(tiles[row][col].getOwner());
+                System.out.println(player1.getAmountOfTilesOccupied());
+
             } else {
                 tiles[row][col].setOccupied(true);
+                tiles[row][col].setOwner(player2);
 
                 player2.addOccupiedTile();
                 player2.setIsCurrentlyPlaying(false);
@@ -44,6 +49,11 @@ public class GameController {
                 gameView.markTile(row, col, "o");
                 gameView.updateCurrentPlayer("Spelare 1");
                 gameView.updateInfoText("Spelare 1 tur att välja");
+
+                //debug
+                System.out.println(tiles[row][col]);
+                System.out.println(tiles[row][col].getOwner());
+                System.out.println(player2.getAmountOfTilesOccupied());
             }
         } else {
             gameView.updateInfoText("Denna ruta är redan upptagen. Välj en annan ruta.");
