@@ -28,6 +28,7 @@ public class GameController {
             { 0, -1},          { 0, 1},
             { 1, -1}, { 1, 0}, { 1, 1}
     };
+    private boolean isGameOver = false;
 
     public GameController() {
         players = new ArrayList<>();
@@ -57,6 +58,16 @@ public class GameController {
             // update the players counter for the amount of tiles he is occupying
             currentPlayer.addOccupiedTile();
 
+            if(currentPlayer.getAmountOfTilesOccupied() == 2){
+                isGameOver = true;
+                gameView.updateInfoText(currentPlayer.getName() + " has won the game!");
+                gameView.disableBoard();
+                gameView.updateCurrentPlayer(currentPlayer.getName() + " has won the game!");
+                gameView.winnerName();
+                return;
+            }
+            
+
             // mark the tile with the players mark
             gameView.markTile(row, col, currentPlayer.getMark());
 
@@ -67,7 +78,7 @@ public class GameController {
 
             // update info on gui
             gameView.updateCurrentPlayer(currentPlayer.getName());
-            gameView.updateInfoText(currentPlayer.getName() + " tur att välja");
+            gameView.updateInfoText(currentPlayer.getName() + " Turn to pick a square.");
 
             //debug
             System.out.println(tiles[row][col]);
@@ -75,7 +86,7 @@ public class GameController {
             System.out.println(currentPlayer.getAmountOfTilesOccupied());
 
         } else {
-            gameView.updateInfoText("Denna ruta är redan upptagen. Välj en annan ruta.");
+            gameView.updateInfoText("Square is occupied. Pick another square.");
         }
     }
 
@@ -116,15 +127,9 @@ public class GameController {
         tiles[row][col] = new Tile(row, col);
     }
 
-    public boolean gameEnded() {
-        gameView.winnerName();
-        // if Board is full, return true
-        return false;
-    }
-
     public String winnerName(String name){
         if(name != null){
-            player.setWinnerrName(name);
+            this.currentPlayer.setWinnerrName(name);
             winnerLogger(name);
 
         }
@@ -145,5 +150,9 @@ public class GameController {
 
     private void switchCurrentPlayer() {
         player.setIsCurrentlyPlaying(false);
+    }
+
+    public void startGame() {
+        gameView.updateCurrentPlayer(currentPlayer.getName());
     }
 }

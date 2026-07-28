@@ -15,6 +15,7 @@ public class GameView {
     private JButton submitButton;
     private JLabel statusLabel;
     private JLabel infoLabel;
+    private JLabel winnerLabel;
     private JTextField textField;
     GameController gameController;
 
@@ -87,12 +88,13 @@ public class GameView {
     JFrame winnerFrame = new JFrame("Winner");
     winnerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     winnerFrame.setSize(300, 150);
+    winnerFrame.setLocationRelativeTo(null);
 
-    JLabel winnerLabel = new JLabel("Enter name here", SwingConstants.CENTER);
-    JButton submitButton = new JButton("Submit");
-    JTextField textField = new JTextField(20);
+    winnerLabel = new JLabel("Enter name here", SwingConstants.CENTER);
+    submitButton = new JButton("Submit");
+    textField = new JTextField(20);
 
-    JPanel winnerPanel = new JPanel();
+    winnerPanel = new JPanel();
 
     winnerPanel.add(textField);
     winnerPanel.add(submitButton);
@@ -114,8 +116,15 @@ public class GameView {
     winnerFrame.setVisible(true);
 }
 
-
     public void markTile(int row, int col, String mark) {
         boardButtons[row][col].setText(mark);
+    }
+
+    public void disableBoard() {
+        for (int row = 0; row < boardButtons.length; row++) {
+            for (int col = 0; col < boardButtons[row].length; col++) {
+                boardButtons[row][col].setEnabled(false);
+            }
+        }
     }
 }

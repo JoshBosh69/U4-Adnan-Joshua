@@ -35,11 +35,13 @@ public class Player {
         }
     }
 
-    public int  getAmountOfTilesOccupied() {
+    public int getAmountOfTilesOccupied() {
+        System.out.println(amountOfTilesOccupied);
         return amountOfTilesOccupied;
     }
 
     public void addOccupiedTile() {
         amountOfTilesOccupied++;
+        System.out.println("add function: " + amountOfTilesOccupied);
     }
 }
