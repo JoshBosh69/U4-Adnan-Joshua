@@ -2,10 +2,20 @@ package Model.Player;
 
 public class Player {
     private String name;
+    private String mark;
     private boolean isCurrentlyPlaying = false;
     private int amountOfTilesOccupied;
 
-    public Player() {
+    public Player(String name, String mark) {
+        this.name = name;
+        this.mark = mark;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public String getMark() {
+        return mark;
     }
 
     public void setIsCurrentlyPlaying(boolean status) {
