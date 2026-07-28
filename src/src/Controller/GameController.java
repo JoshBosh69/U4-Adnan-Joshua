@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.Player.Player;
-import Model.PlayingField.Board;
 import Model.PlayingField.Tile;
 import View.GameView;
 import java.io.FileWriter;
@@ -17,10 +16,8 @@ public class GameController {
     private Logger logger = Logger.getLogger(GameController.class.getName());
     private FileWriter fileWriter;
     private PrintWriter printWriter;
-    private IOException ioException;
 
     private GameView gameView;
-    private Board board;
     private Player player;
     private Player currentPlayer;
     private Player otherPlayer;
