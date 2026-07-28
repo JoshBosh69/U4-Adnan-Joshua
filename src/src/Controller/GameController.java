@@ -42,27 +42,33 @@ public class GameController {
         this.gameView = new GameView(this);
 
         // For testing:
-        this.player = new Player("player1", "o");
+        //this.player = new Player("player1", "o");
 
     }
 
     public void buttonPressed(int row, int col) {
+        //check if tile is already occupied
         if (!tiles[row][col].isOccupied()) {
+            // if not then set to occupied and register the player to that tile
             tiles[row][col].setOccupied(true);
             tiles[row][col].setOwner(currentPlayer);
 
-            // Check if suprise
+            // Check if surprise
             for (int[] dir : directions) {
                 checkDirection(row, col, dir[0], dir[1], currentPlayer, otherPlayer);
             }
+            // update the players counter for the amount of tiles he is occupying
             currentPlayer.addOccupiedTile();
 
+            // mark the tile with the players mark
             gameView.markTile(row, col, currentPlayer.getMark());
 
+            // switch turns
             Player tempPlayer = currentPlayer;
             currentPlayer = otherPlayer;
             otherPlayer = tempPlayer;
 
+            // update info on gui
             gameView.updateCurrentPlayer(currentPlayer.getName());
             gameView.updateInfoText(currentPlayer.getName() + " tur att välja");
 
