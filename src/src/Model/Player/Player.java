@@ -5,6 +5,7 @@ public class Player {
     private String mark;
     private boolean isCurrentlyPlaying = false;
     private int amountOfTilesOccupied;
+    private boolean skipNextTurn = false;
 
     public Player(String name, String mark) {
         this.name = name;
@@ -42,6 +43,14 @@ public class Player {
 
     public void addOccupiedTile() {
         amountOfTilesOccupied++;
-        System.out.println("add function: " + amountOfTilesOccupied);
+        //System.out.println("add function: " + amountOfTilesOccupied);
+    }
+
+    public void setSkipNextTurn (boolean skipNextTurn) {
+        this.skipNextTurn = skipNextTurn;
+    }
+
+    public boolean getSkipNextTurn() {
+        return skipNextTurn;
     }
 }

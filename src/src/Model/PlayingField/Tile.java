@@ -1,11 +1,14 @@
 package Model.PlayingField;
 
 import Model.Player.Player;
+import Model.PlayingField.Mysteries.MysteryTile;
 
 public class Tile {
     private int xcor;
     private int ycor;
     private boolean isOccupied = false;
+    private boolean isMystery = false;
+    private MysteryTile mystery;
     Player player;
 
     public Tile(int xcor, int ycor) {
@@ -46,4 +49,23 @@ public class Tile {
     }
 
 
+    public boolean isMystery() {
+        return isMystery;
+    }
+
+    public void setIsMystery(boolean mystery) {
+        isMystery = mystery;
+    }
+
+    public MysteryTile getMysteryType() {
+        return mystery;
+    }
+
+    public void setMysteryType(MysteryTile mysteryType) {
+        this.mystery = mysteryType;
+    }
+
+    public boolean isMysteryActive() {
+        return mystery.isActive();
+    }
 }

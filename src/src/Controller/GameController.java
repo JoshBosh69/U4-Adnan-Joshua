@@ -1,6 +1,10 @@
 package Controller;
 
 import Model.Player.Player;
+import Model.PlayingField.Mysteries.AbyssalRoar;
+import Model.PlayingField.Mysteries.MysteryTile;
+import Model.PlayingField.Mysteries.Narcissus;
+import Model.PlayingField.Mysteries.TimeJump;
 import Model.PlayingField.Tile;
 import View.GameView;
 import java.io.FileWriter;
@@ -8,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +33,9 @@ public class GameController {
             { 0, -1},          { 0, 1},
             { 1, -1}, { 1, 0}, { 1, 1}
     };
-    private boolean isGameOver = false;
+    private boolean switchTurns = true;
+    private final int mysteries = 5;
+    private int placedMysteries = 0;
 
     public GameController() {
         players = new ArrayList<>();
@@ -38,14 +45,74 @@ public class GameController {
         otherPlayer = players.getLast();
 
         this.gameView = new GameView(this);
+        placeMysteries();
 
         // For testing:
         //this.player = new Player("player1", "o");
 
     }
 
+    private void placeMysteries() {
+        Random random = new Random();
+
+        while (placedMysteries < mysteries) {
+            int mysteryIndex = random.nextInt(3);
+            int randomRow = random.nextInt(tiles.length);
+            int randomCol = random.nextInt(tiles[0].length);
+
+            if ((randomRow == 0 || randomRow == tiles.length - 1) && (randomCol == tiles[0].length - 1 || randomCol == 0)) {
+                continue;
+            }
+
+            if (hasAdjacentMystery(randomRow, randomCol)) {
+                continue;
+            }
+
+            switch (mysteryIndex) {
+                case 0:
+                    tiles[randomRow][randomCol].setMysteryType(new TimeJump());
+                    break;
+                case 1:
+                    tiles[randomRow][randomCol].setMysteryType(new AbyssalRoar());
+                    break;
+                case 2:
+                    tiles[randomRow][randomCol].setMysteryType(new Narcissus());
+                    break;
+                default:
+                    break;
+            }
+            tiles[randomRow][randomCol].setIsMystery(true);
+
+            // debug
+            gameView.markTile(randomRow, randomCol, "?");
+            if (mysteryIndex == 0) {
+                gameView.markTile(randomRow, randomCol, "T");
+            } else if (mysteryIndex == 2) {
+                gameView.markTile(randomRow, randomCol, "N");
+            }
+            placedMysteries++;
+        }
+
+    }
+
+    private boolean hasAdjacentMystery(int row, int col) {
+        for (int[] dir : directions) {
+            int r = row + dir[0];
+            int c = col + dir[1];
+            if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[0].length) {
+                if (tiles[r][c].isMystery()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void buttonPressed(int row, int col) {
+        // by default switching between players is enabled
+        switchTurns = true;
         //check if tile is already occupied
+
         if (!tiles[row][col].isOccupied()) {
             // if not then set to occupied and register the player to that tile
             tiles[row][col].setOccupied(true);
@@ -58,7 +125,8 @@ public class GameController {
             // update the players counter for the amount of tiles he is occupying
             currentPlayer.addOccupiedTile();
 
-            if(currentPlayer.getAmountOfTilesOccupied() == 2){
+            /*
+                if(currentPlayer.getAmountOfTilesOccupied() == 2){
                 isGameOver = true;
                 gameView.updateInfoText(currentPlayer.getName() + " has won the game!");
                 gameView.disableBoard();
@@ -66,24 +134,22 @@ public class GameController {
                 gameView.winnerName();
                 return;
             }
-            
+             */
 
             // mark the tile with the players mark
             gameView.markTile(row, col, currentPlayer.getMark());
 
             // switch turns
-            Player tempPlayer = currentPlayer;
-            currentPlayer = otherPlayer;
-            otherPlayer = tempPlayer;
+            switchTurns();
 
             // update info on gui
             gameView.updateCurrentPlayer(currentPlayer.getName());
             gameView.updateInfoText(currentPlayer.getName() + " Turn to pick a square.");
 
             //debug
-            System.out.println(tiles[row][col]);
-            System.out.println(tiles[row][col].getOwner());
-            System.out.println(currentPlayer.getAmountOfTilesOccupied());
+            //System.out.println(tiles[row][col]);
+            System.out.println(tiles[row][col].getOwner().getName());
+            //System.out.println(currentPlayer.getAmountOfTilesOccupied());
 
         } else {
             gameView.updateInfoText("Square is occupied. Pick another square.");
@@ -108,6 +174,13 @@ public class GameController {
                 if (!tilesToChange.isEmpty()) {
                     for (Tile t : tilesToChange) {
                         t.setOwner(currentPlayer);
+
+                        if (t.isMystery() && t.isMysteryActive()) {
+                            MysteryTile mystery = t.getMysteryType();
+                            switchTurns = mystery.activateMystery(currentPlayer, otherPlayer);
+                            mystery.setIsActive(false);
+                        }
+
                         gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());
                     }
                 }
@@ -148,11 +221,30 @@ public class GameController {
         return name;
     }
 
-    private void switchCurrentPlayer() {
-        player.setIsCurrentlyPlaying(false);
-    }
-
     public void startGame() {
         gameView.updateCurrentPlayer(currentPlayer.getName());
     }
+
+    public void switchTurns() {
+        if (switchTurns) {
+            Player tempPlayer = currentPlayer;
+            this.currentPlayer = otherPlayer;
+            this.otherPlayer = tempPlayer;
+
+            // efter det vanliga bytet, kolla om den nya spelaren ska hoppas över
+            if (currentPlayer.getSkipNextTurn()) {
+                currentPlayer.setSkipNextTurn(false);
+                gameView.updateInfoText(currentPlayer.getName() + " hoppar över sin tur (Narcissus)!");
+
+                // den överhoppade spelarens motståndare spelar istället
+                Player tempPlayer2 = currentPlayer;
+                this.currentPlayer = otherPlayer;
+                this.otherPlayer = tempPlayer2;
+            }
+        } else {
+            gameView.updateInfoText("TimeJump! " + currentPlayer.getName() + " get to play again");
+        }
+    }
+
+
 }
