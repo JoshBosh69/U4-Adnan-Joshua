@@ -90,7 +90,7 @@ public class GameView {
     winnerFrame.setSize(300, 150);
     winnerFrame.setLocationRelativeTo(null);
 
-    winnerLabel = new JLabel("Enter name here", SwingConstants.CENTER);
+    winnerLabel = new JLabel("Enter your name here", SwingConstants.CENTER);
     submitButton = new JButton("Submit");
     textField = new JTextField(20);
 
@@ -124,6 +124,14 @@ public class GameView {
         for (int row = 0; row < boardButtons.length; row++) {
             for (int col = 0; col < boardButtons[row].length; col++) {
                 boardButtons[row][col].setEnabled(false);
+            }
+        }
+    }
+
+    public void enableBoard() {
+        for (int row = 0; row < boardButtons.length; row++) {
+            for (int col = 0; col < boardButtons[row].length; col++) {
+                boardButtons[row][col].setEnabled(true);
             }
         }
     }

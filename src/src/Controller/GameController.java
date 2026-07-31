@@ -127,8 +127,20 @@ public class GameController {
             // update the players counter for the amount of tiles he is occupying
             currentPlayer.addOccupiedTile();
 
+            if (checkGameOver()) {
+                gameView.disableBoard();
+                Player winner = getMatchWinner();
+
+                if (winner != null) {
+                    gameView.updateInfoText("GAME FINISHED - WINNER IS: " + winner.getName());
+                    gameView.winnerName();
+                } else
+                    gameView.updateInfoText("GAME ENDED IN A DRAW");
+                return;
+            }
+
             /*
-                if(currentPlayer.getAmountOfTilesOccupied() == 2){
+                if(){
                 isGameOver = true;
                 gameView.updateInfoText(currentPlayer.getName() + " has won the game!");
                 gameView.disableBoard();
@@ -253,6 +265,46 @@ public class GameController {
             }
         } else {
             gameView.updateInfoText("TimeJump! " + currentPlayer.getName() + " get to play again");
+        }
+    }
+
+    private boolean checkGameOver() {
+        return isBoardFull() || allMysteriesActivated();
+    }
+
+    private boolean isBoardFull() {
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[0].length; j++) {
+                if (!tiles[i][j].isOccupied()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean allMysteriesActivated() {
+        int activatedMysteries = 0;
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[0].length; j++) {
+                if (tiles[i][j].isMystery() && !tiles[i][j].isMysteryActive()) {
+                    activatedMysteries ++;
+                }
+            }
+        }
+        return activatedMysteries == mysteries;
+    }
+
+    public Player getMatchWinner() {
+        Player p1 = players.getFirst();
+        Player p2 = players.getLast();
+
+        if (p1.getAmountOfTilesOccupied() > p2.getAmountOfTilesOccupied()) {
+            return p1;
+        } else if (p2.getAmountOfTilesOccupied() > p1.getAmountOfTilesOccupied()) {
+            return p2;
+        } else {
+            return null; // might be a tie
         }
     }
 
