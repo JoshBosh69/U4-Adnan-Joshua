@@ -84,11 +84,13 @@ public class GameController {
             tiles[randomRow][randomCol].setIsMystery(true);
 
             // debug
-            gameView.markTile(randomRow, randomCol, "?");
+            //gameView.markTile(randomRow, randomCol, "?");
             if (mysteryIndex == 0) {
                 gameView.markTile(randomRow, randomCol, "T");
             } else if (mysteryIndex == 2) {
                 gameView.markTile(randomRow, randomCol, "N");
+            } else {
+                gameView.markTile(randomRow, randomCol, "A");
             }
             placedMysteries++;
         }
@@ -148,7 +150,7 @@ public class GameController {
 
             //debug
             //System.out.println(tiles[row][col]);
-            System.out.println(tiles[row][col].getOwner().getName());
+            //System.out.println(tiles[row][col].getOwner().getName());
             //System.out.println(currentPlayer.getAmountOfTilesOccupied());
 
         } else {
@@ -169,6 +171,8 @@ public class GameController {
             if (currentTile.getOwner() == otherPlayer) {
                 // enemy tile — could be part of a pinch, keep collecting
                 tilesToChange.add(currentTile);
+            } else if (currentTile.isMystery() && currentTile.isMysteryActive()) {
+                tilesToChange.add(currentTile);
             } else if (currentTile.getOwner() == currentPlayer) {
                 // found my own tile — valid capture if we collected at least one enemy tile
                 if (!tilesToChange.isEmpty()) {
@@ -177,8 +181,14 @@ public class GameController {
 
                         if (t.isMystery() && t.isMysteryActive()) {
                             MysteryTile mystery = t.getMysteryType();
-                            switchTurns = mystery.activateMystery(currentPlayer, otherPlayer);
+                            List<Tile> affectedTiles = new ArrayList<>();
+
+                            switchTurns = mystery.activateMystery(currentPlayer, otherPlayer, t.getXcor(), t.getYcor(), tiles, directions, affectedTiles);
                             mystery.setIsActive(false);
+
+                            for (Tile affected : affectedTiles) {
+                                gameView.markTile(affected.getXcor(), affected.getYcor(), ""); // tom sträng = rutan är nu tom
+                            }
                         }
 
                         gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());

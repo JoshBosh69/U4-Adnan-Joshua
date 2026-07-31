@@ -2,6 +2,9 @@ package Model.PlayingField.Mysteries;
 
 import Controller.GameController;
 import Model.Player.Player;
+import Model.PlayingField.Tile;
+
+import java.util.List;
 
 public class Narcissus implements MysteryTile{
     private boolean isActive;
@@ -11,7 +14,7 @@ public class Narcissus implements MysteryTile{
     }
 
     @Override
-    public boolean activateMystery(Player currentPlayer, Player otherPlayer) {
+    public boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles) {
         currentPlayer.setSkipNextTurn(true);
         return true;
     }
