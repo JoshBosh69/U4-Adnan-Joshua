@@ -309,4 +309,6 @@ public class GameController {
     }
 
 
+    public void resetGame() {
+    }
 }

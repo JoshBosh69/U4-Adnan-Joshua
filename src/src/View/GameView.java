@@ -10,15 +10,16 @@ public class GameView {
     private JFrame frame;
     private JPanel boardPanel;
     private JPanel topPanel;
-    private JPanel winnerPanel;;
+    private JPanel bottomPanel;
+    private JPanel winnerPanel;
     private JButton[][] boardButtons;
     private JButton submitButton;
+    private JButton resetButton;
     private JLabel statusLabel;
     private JLabel infoLabel;
     private JLabel winnerLabel;
     private JTextField textField;
     GameController gameController;
-
 
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -28,6 +29,12 @@ public class GameView {
         frame.setLayout(new BorderLayout());
 
         topPanel = new JPanel(new GridLayout(2,1));
+
+        bottomPanel = new JPanel();
+        resetButton = new JButton("Reset");
+        resetButton.addActionListener(e -> gameController.resetGame());
+        bottomPanel.add(resetButton);
+
 
         infoLabel = new JLabel("Pick square",SwingConstants.CENTER);
         infoLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -67,9 +74,9 @@ public class GameView {
 
         frame.add(topPanel,BorderLayout.NORTH);
         frame.add(boardPanel, BorderLayout.CENTER);
+        frame.add(bottomPanel,BorderLayout.SOUTH);
         frame.setLocationRelativeTo(null); 
         frame.setVisible(true);
-
     }
 
     public JButton[][] getBoardButtons() {
