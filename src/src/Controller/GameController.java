@@ -310,5 +310,27 @@ public class GameController {
 
 
     public void resetGame() {
+        tiles = new Tile[10][10];
+        for (int row = 0; row < tiles.length; row++) {
+            for (int col = 0; col < tiles[0].length; col++) {
+                registerTile(row, col);
+                gameView.markTile(row, col, "");
+            }
+        }
+
+        placedMysteries = 0;
+        placeMysteries();
+
+        for (Player p : players) {
+            p.setAmountOfOccupiedTiles(0);
+            p.setSkipNextTurn(false);
+        }
+
+        currentPlayer = players.getFirst();
+        otherPlayer = players.getLast();
+
+        gameView.enableBoard();
+        gameView.updateCurrentPlayer(currentPlayer.getName());
+        gameView.updateInfoText("New Game. Pick a square");
     }
 }

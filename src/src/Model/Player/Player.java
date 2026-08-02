@@ -53,4 +53,8 @@ public class Player {
     public boolean getSkipNextTurn() {
         return skipNextTurn;
     }
+
+    public void setAmountOfOccupiedTiles(int i) {
+        amountOfTilesOccupied = i;
+    }
 }
