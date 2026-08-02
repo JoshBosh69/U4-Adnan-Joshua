@@ -116,7 +116,8 @@ public class GameView {
             String name = textField.getText();
             gameController.winnerName(name);
             System.out.println("Winner name set to: " + name);
-            System.exit(0);
+            winnerFrame.dispose();
+            JOptionPane.showMessageDialog(frame, gameController.getHighscore(), "Highscore", JOptionPane.INFORMATION_MESSAGE);
         }
     });
 
@@ -141,5 +142,9 @@ public class GameView {
                 boardButtons[row][col].setEnabled(true);
             }
         }
+    }
+
+    public void showHighscore(String formattedHighscore) {
+        JOptionPane.showMessageDialog(frame, formattedHighscore, "Highscore", JOptionPane.INFORMATION_MESSAGE);
     }
 }

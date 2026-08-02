@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Highscore;
 import Model.Player.Player;
 import Model.PlayingField.Mysteries.AbyssalRoar;
 import Model.PlayingField.Mysteries.MysteryTile;
@@ -36,6 +37,7 @@ public class GameController {
     private boolean switchTurns = true;
     private final int mysteries = 5;
     private int placedMysteries = 0;
+    private Highscore highscore;
 
     public GameController() {
         players = new ArrayList<>();
@@ -43,6 +45,8 @@ public class GameController {
         players.add(new Player("player2", "o"));
         currentPlayer = players.getFirst();
         otherPlayer = players.getLast();
+        highscore = new Highscore();
+        highscore.loadFromFile("highscore.txt");
 
         this.gameView = new GameView(this);
         placeMysteries();
@@ -132,10 +136,18 @@ public class GameController {
                 Player winner = getMatchWinner();
 
                 if (winner != null) {
-                    gameView.updateInfoText("GAME FINISHED - WINNER IS: " + winner.getName());
-                    gameView.winnerName();
-                } else
+                    int score = winner.getAmountOfTilesOccupied();
+                    if (highscore.qualifies(score)) {
+                        gameView.updateInfoText("GAME FINISHED - WINNER IS: " + winner.getName());
+                        gameView.winnerName();
+                    } else {
+                        gameView.updateInfoText("GAME FINISHED - " + winner.getName() + " won, but didn't qualify for highscore.");
+                        gameView.showHighscore(highscore.getFormattedHighscore());
+                    }
+                } else {
                     gameView.updateInfoText("GAME ENDED IN A DRAW");
+                    gameView.showHighscore(highscore.getFormattedHighscore());
+                }
                 return;
             }
 
@@ -224,9 +236,9 @@ public class GameController {
 
     public String winnerName(String name){
         if(name != null){
-            this.currentPlayer.setWinnerrName(name);
-            winnerLogger(name);
-
+            int score = currentPlayer.getAmountOfTilesOccupied();
+            highscore.addEntry(name, score);
+            highscore.saveToFile("highscore.txt");
         }
         return name;
     }
@@ -332,5 +344,9 @@ public class GameController {
         gameView.enableBoard();
         gameView.updateCurrentPlayer(currentPlayer.getName());
         gameView.updateInfoText("New Game. Pick a square");
+    }
+
+    public String getHighscore() {
+        return highscore.getFormattedHighscore();
     }
 }
