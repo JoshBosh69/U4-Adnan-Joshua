@@ -3,7 +3,6 @@ package Model.Player;
 public class Player {
     private String name;
     private String mark;
-    private boolean isCurrentlyPlaying = false;
     private int amountOfTilesOccupied;
     private boolean skipNextTurn = false;
 
@@ -19,31 +18,12 @@ public class Player {
         return mark;
     }
 
-    public void setIsCurrentlyPlaying(boolean status) {
-        isCurrentlyPlaying = status;
-    }
-
-    public boolean getIsCurrentlyPlaying() {
-        return isCurrentlyPlaying;
-
-    }
-
-    public void setWinnerrName(String name) {
-        if(name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be null or empty");
-        }else {
-            this.name = name;
-        }
-    }
-
     public int getAmountOfTilesOccupied() {
-        System.out.println(amountOfTilesOccupied);
         return amountOfTilesOccupied;
     }
 
     public void addOccupiedTile() {
         amountOfTilesOccupied++;
-        //System.out.println("add function: " + amountOfTilesOccupied);
     }
 
     public void setSkipNextTurn (boolean skipNextTurn) {
@@ -54,7 +34,7 @@ public class Player {
         return skipNextTurn;
     }
 
-    public void setAmountOfOccupiedTiles(int i) {
-        amountOfTilesOccupied = i;
+    public void setAmountOfOccupiedTiles(int amount) {
+        amountOfTilesOccupied = amount;
     }
 }

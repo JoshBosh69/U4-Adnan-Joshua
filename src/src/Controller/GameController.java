@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Highscore;
+import Model.PlayingField.Highscore.Highscore;
 import Model.Player.Player;
 import Model.PlayingField.Mysteries.AbyssalRoar;
 import Model.PlayingField.Mysteries.MysteryTile;
@@ -8,36 +8,30 @@ import Model.PlayingField.Mysteries.Narcissus;
 import Model.PlayingField.Mysteries.TimeJump;
 import Model.PlayingField.Tile;
 import View.GameView;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GameController {
-    // For Logging
-    private Logger logger = Logger.getLogger(GameController.class.getName());
-    private FileWriter fileWriter;
-    private PrintWriter printWriter;
 
     private GameView gameView;
-    private Player player;
     private Player currentPlayer;
     private Player otherPlayer;
     private List<Player> players;
     private Tile[][] tiles = new Tile[10][10];
-    private int directions[][] = {
+    private final int[][] directions = {
             {-1, -1}, {-1, 0}, {-1, 1},
             { 0, -1},          { 0, 1},
             { 1, -1}, { 1, 0}, { 1, 1}
     };
-    private boolean switchTurns = true;
+    private boolean allowSwitchTurn = true;
     private final int mysteries = 5;
     private int placedMysteries = 0;
     private Highscore highscore;
+
+    // ------------------------------------------------------------
+    // Init
+    // ------------------------------------------------------------
 
     public GameController() {
         players = new ArrayList<>();
@@ -50,10 +44,10 @@ public class GameController {
 
         this.gameView = new GameView(this);
         placeMysteries();
+    }
 
-        // For testing:
-        //this.player = new Player("player1", "o");
-
+    public void registerTile(int row, int col) {
+        tiles[row][col] = new Tile(row, col);
     }
 
     private void placeMysteries() {
@@ -87,8 +81,6 @@ public class GameController {
             }
             tiles[randomRow][randomCol].setIsMystery(true);
 
-            // debug
-            //gameView.markTile(randomRow, randomCol, "?");
             if (mysteryIndex == 0) {
                 gameView.markTile(randomRow, randomCol, "T");
             } else if (mysteryIndex == 2) {
@@ -98,7 +90,6 @@ public class GameController {
             }
             placedMysteries++;
         }
-
     }
 
     private boolean hasAdjacentMystery(int row, int col) {
@@ -114,72 +105,37 @@ public class GameController {
         return false;
     }
 
+    // ------------------------------------------------------------
+    // Core game logic
+    // ------------------------------------------------------------
+
     public void buttonPressed(int row, int col) {
-        // by default switching between players is enabled
-        switchTurns = true;
-        //check if tile is already occupied
+        allowSwitchTurn = true;
 
-        if (!tiles[row][col].isOccupied()) {
-            // if not then set to occupied and register the player to that tile
-            tiles[row][col].setOccupied(true);
-            tiles[row][col].setOwner(currentPlayer);
-
-            // Check if surprise
-            for (int[] dir : directions) {
-                checkDirection(row, col, dir[0], dir[1], currentPlayer, otherPlayer);
-            }
-            // update the players counter for the amount of tiles he is occupying
-            currentPlayer.addOccupiedTile();
-
-            if (checkGameOver()) {
-                gameView.disableBoard();
-                Player winner = getMatchWinner();
-
-                if (winner != null) {
-                    int score = winner.getAmountOfTilesOccupied();
-                    if (highscore.qualifies(score)) {
-                        gameView.updateInfoText("GAME FINISHED - WINNER IS: " + winner.getName());
-                        gameView.winnerName();
-                    } else {
-                        gameView.updateInfoText("GAME FINISHED - " + winner.getName() + " won, but didn't qualify for highscore.");
-                        gameView.showHighscore(highscore.getFormattedHighscore());
-                    }
-                } else {
-                    gameView.updateInfoText("GAME ENDED IN A DRAW");
-                    gameView.showHighscore(highscore.getFormattedHighscore());
-                }
-                return;
-            }
-
-            /*
-                if(){
-                isGameOver = true;
-                gameView.updateInfoText(currentPlayer.getName() + " has won the game!");
-                gameView.disableBoard();
-                gameView.updateCurrentPlayer(currentPlayer.getName() + " has won the game!");
-                gameView.winnerName();
-                return;
-            }
-             */
-
-            // mark the tile with the players mark
-            gameView.markTile(row, col, currentPlayer.getMark());
-
-            // switch turns
-            switchTurns();
-
-            // update info on gui
-            gameView.updateCurrentPlayer(currentPlayer.getName());
-            gameView.updateInfoText(currentPlayer.getName() + " Turn to pick a square.");
-
-            //debug
-            //System.out.println(tiles[row][col]);
-            //System.out.println(tiles[row][col].getOwner().getName());
-            //System.out.println(currentPlayer.getAmountOfTilesOccupied());
-
-        } else {
+        if (tiles[row][col].isOccupied()) {
             gameView.updateInfoText("Square is occupied. Pick another square.");
+            return;
         }
+
+        tiles[row][col].setOccupied(true);
+        tiles[row][col].setOwner(currentPlayer);
+
+        for (int[] dir : directions) {
+            checkDirection(row, col, dir[0], dir[1], currentPlayer, otherPlayer);
+        }
+        currentPlayer.addOccupiedTile();
+
+        if (checkGameOver()) {
+            handleGameOver();
+            return;
+        }
+
+        gameView.markTile(row, col, currentPlayer.getMark());
+
+        switchTurns();
+
+        gameView.updateCurrentPlayer(currentPlayer.getName());
+        gameView.updateInfoText(currentPlayer.getName() + " Turn to pick a square.");
     }
 
     private void checkDirection(int row, int col, int dRow, int dCol, Player currentPlayer, Player otherPlayer) {
@@ -188,17 +144,14 @@ public class GameController {
         int r = row + dRow;
         int c = col + dCol;
 
-        // walk outward one step at a time in this direction
         while (r >= 0 && r < tiles.length && c >= 0 && c < tiles[0].length) {
             Tile currentTile = tiles[r][c];
 
             if (currentTile.getOwner() == otherPlayer) {
-                // enemy tile — could be part of a pinch, keep collecting
                 tilesToChange.add(currentTile);
             } else if (currentTile.isMystery() && currentTile.isMysteryActive()) {
                 tilesToChange.add(currentTile);
             } else if (currentTile.getOwner() == currentPlayer) {
-                // found my own tile — valid capture if we collected at least one enemy tile
                 if (!tilesToChange.isEmpty()) {
                     for (Tile t : tilesToChange) {
                         t.setOwner(currentPlayer);
@@ -207,76 +160,66 @@ public class GameController {
                             MysteryTile mystery = t.getMysteryType();
                             List<Tile> affectedTiles = new ArrayList<>();
 
-                            switchTurns = mystery.activateMystery(currentPlayer, otherPlayer, t.getXcor(), t.getYcor(), tiles, directions, affectedTiles);
+                            allowSwitchTurn = mystery.activateMystery(currentPlayer, otherPlayer, t.getXcor(), t.getYcor(), tiles, directions, affectedTiles);
                             mystery.setIsActive(false);
 
                             for (Tile affected : affectedTiles) {
-                                gameView.markTile(affected.getXcor(), affected.getYcor(), ""); // tom sträng = rutan är nu tom
+                                gameView.markTile(affected.getXcor(), affected.getYcor(), "");
                             }
                         }
 
                         gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());
                     }
                 }
-                return; // done with this direction either way
+                return;
             } else {
-                // empty tile — chain is broken, no capture in this direction
                 return;
             }
 
             r += dRow;
             c += dCol;
         }
-        // walked off the board without finding my own tile — no capture
-    }
-
-    public void registerTile(int row, int col) {
-        tiles[row][col] = new Tile(row, col);
-    }
-
-    public String winnerName(String name){
-        if(name != null){
-            int score = currentPlayer.getAmountOfTilesOccupied();
-            highscore.addEntry(name, score);
-            highscore.saveToFile("highscore.txt");
-        }
-        return name;
-    }
-
-    public String winnerLogger(String name) {
-        try {
-            fileWriter = new FileWriter("winner_log.txt", true);
-            printWriter = new PrintWriter(fileWriter);
-            printWriter.println(name);
-            printWriter.close();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error writing to log file", e);
-        }
-        return name;
-    }
-
-    public void startGame() {
-        gameView.updateCurrentPlayer(currentPlayer.getName());
     }
 
     public void switchTurns() {
-        if (switchTurns) {
+        if (allowSwitchTurn) {
             Player tempPlayer = currentPlayer;
             this.currentPlayer = otherPlayer;
             this.otherPlayer = tempPlayer;
 
-            // efter det vanliga bytet, kolla om den nya spelaren ska hoppas över
             if (currentPlayer.getSkipNextTurn()) {
                 currentPlayer.setSkipNextTurn(false);
                 gameView.updateInfoText(currentPlayer.getName() + " hoppar över sin tur (Narcissus)!");
 
-                // den överhoppade spelarens motståndare spelar istället
                 Player tempPlayer2 = currentPlayer;
                 this.currentPlayer = otherPlayer;
                 this.otherPlayer = tempPlayer2;
             }
         } else {
             gameView.updateInfoText("TimeJump! " + currentPlayer.getName() + " get to play again");
+        }
+    }
+
+    // ------------------------------------------------------------
+    // Game Ending
+    // ------------------------------------------------------------
+
+    private void handleGameOver() {
+        gameView.disableBoard();
+        Player winner = getMatchWinner();
+
+        if (winner != null) {
+            int score = winner.getAmountOfTilesOccupied();
+            if (highscore.qualifies(score)) {
+                gameView.updateInfoText("GAME FINISHED - WINNER IS: " + winner.getName());
+                gameView.winnerName();
+            } else {
+                gameView.updateInfoText("GAME FINISHED - " + winner.getName() + " won, but didn't qualify for highscore.");
+                gameView.showHighscore(highscore.getFormattedHighscore());
+            }
+        } else {
+            gameView.updateInfoText("GAME ENDED IN A DRAW");
+            gameView.showHighscore(highscore.getFormattedHighscore());
         }
     }
 
@@ -300,7 +243,7 @@ public class GameController {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
                 if (tiles[i][j].isMystery() && !tiles[i][j].isMysteryActive()) {
-                    activatedMysteries ++;
+                    activatedMysteries++;
                 }
             }
         }
@@ -316,10 +259,30 @@ public class GameController {
         } else if (p2.getAmountOfTilesOccupied() > p1.getAmountOfTilesOccupied()) {
             return p2;
         } else {
-            return null; // might be a tie
+            return null;
         }
     }
 
+    // ------------------------------------------------------------
+    // Highscore logic
+    // ------------------------------------------------------------
+
+    public String winnerName(String name) {
+        if (name != null) {
+            int score = currentPlayer.getAmountOfTilesOccupied();
+            highscore.addEntry(name, score);
+            highscore.saveToFile("highscore.txt");
+        }
+        return name;
+    }
+
+    public String getHighscore() {
+        return highscore.getFormattedHighscore();
+    }
+
+    // ------------------------------------------------------------
+    // Game reset logic
+    // ------------------------------------------------------------
 
     public void resetGame() {
         tiles = new Tile[10][10];
@@ -344,9 +307,5 @@ public class GameController {
         gameView.enableBoard();
         gameView.updateCurrentPlayer(currentPlayer.getName());
         gameView.updateInfoText("New Game. Pick a square");
-    }
-
-    public String getHighscore() {
-        return highscore.getFormattedHighscore();
     }
 }

@@ -1,4 +1,4 @@
-package Model;
+package Model.PlayingField.Highscore;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ public class Highscore {
                 writer.println(entry.getName() + "," + entry.getScore());
             }
         } catch (IOException e) {
+            System.out.println("Kunde inte spara highscore-fil");
         }
     }
 
@@ -31,7 +32,7 @@ public class Highscore {
                 }
             }
         } catch (IOException e) {
-
+            System.out.println("Kunde inte läsa highscore-fil");
         }
         sortEntries();
     }
@@ -49,7 +50,7 @@ public class Highscore {
         for (int i = 0; i < entries.size() - 1; i++) {
             for (int j = 0; j < entries.size() - 1 - i; j++) {
                 if (entries.get(j).getScore() < entries.get(j + 1).getScore()) {
-                    // fel ordning — byt plats
+
                     HighscoreEntry temp = entries.get(j);
                     entries.set(j, entries.get(j + 1));
                     entries.set(j + 1, temp);
@@ -67,9 +68,6 @@ public class Highscore {
         return score > lowestScore;
     }
 
-    public List<HighscoreEntry> getEntries() {
-        return entries;
-    }
 
     public String getFormattedHighscore() {
         String highScore = "";

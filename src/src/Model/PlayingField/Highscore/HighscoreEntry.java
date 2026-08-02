@@ -1,4 +1,4 @@
-package Model;
+package Model.PlayingField.Highscore;
 
 public class HighscoreEntry {
     private String name;

@@ -9,7 +9,7 @@ public class Tile {
     private boolean isOccupied = false;
     private boolean isMystery = false;
     private MysteryTile mystery;
-    Player player;
+    private Player player;
 
     public Tile(int xcor, int ycor) {
         this.xcor = xcor;
@@ -66,6 +66,6 @@ public class Tile {
     }
 
     public boolean isMysteryActive() {
-        return mystery.isActive();
+        return mystery != null && mystery.isActive();
     }
 }

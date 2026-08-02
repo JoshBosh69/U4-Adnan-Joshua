@@ -1,6 +1,5 @@
 package Model.PlayingField.Mysteries;
 
-import Controller.GameController;
 import Model.Player.Player;
 import Model.PlayingField.Tile;
 
@@ -12,7 +11,6 @@ public class TimeJump implements MysteryTile{
     public TimeJump() {
         isActive = true;
     }
-
 
     @Override
     public boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles) {
