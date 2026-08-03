@@ -12,6 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Kontrollklass som styr spelet Omvälvning. Ansvarar för att sätta upp
+ * spelplanen och Mysterium, hantera spelarnas drag, avgöra överraskningar
+ * och Mysterium-aktiveringar, kontrollera turordning, avgöra när spelet
+ * är slut samt koppla samman spelets tillstånd med highscore-listan och
+ * det grafiska gränssnittet.
+ *
+ * @author Adnan
+ */
 public class GameController {
 
     private GameView gameView;
@@ -33,6 +42,13 @@ public class GameController {
     // Init
     // ------------------------------------------------------------
 
+    /**
+     * Skapar en ny spelomgång. Initierar de två spelarna, läser in
+     * befintlig highscore-lista från fil, skapar det grafiska
+     * gränssnittet och placerar ut Mysterium på spelplanen.
+     *
+     * @author Adnan
+     */
     public GameController() {
         players = new ArrayList<>();
         players.add(new Player("player1", "x"));
@@ -46,10 +62,27 @@ public class GameController {
         placeMysteries();
     }
 
+    /**
+     * Skapar och registrerar en ny, tom ruta på angiven position i
+     * spelplanens array.
+     *
+     * @param row raden rutan ska registreras på
+     * @param col kolumnen rutan ska registreras på
+     * @author Adnan
+     */
     public void registerTile(int row, int col) {
         tiles[row][col] = new Tile(row, col);
     }
 
+    /**
+     * Placerar slumpmässigt ut ett antal Mysterium på spelplanen. Varje
+     * Mysterium tilldelas slumpmässigt en av de tre implementerade
+     * typerna (Tidshopp, Avgrundsvrål, Narcissus). Mysterium får inte
+     * placeras i något av brädets fyra hörn, och får inte placeras
+     * angränsande till ett annat Mysterium.
+     *
+     * @author Adnan
+     */
     private void placeMysteries() {
         Random random = new Random();
 
@@ -92,6 +125,16 @@ public class GameController {
         }
     }
 
+    /**
+     * Kontrollerar om någon av de åtta angränsande rutorna runt en
+     * given position redan innehåller ett Mysterium.
+     *
+     * @param row raden som ska kontrolleras
+     * @param col kolumnen som ska kontrolleras
+     * @return true om minst en angränsande ruta innehåller ett
+     *         Mysterium, annars false
+     * @author Adnan
+     */
     private boolean hasAdjacentMystery(int row, int col) {
         for (int[] dir : directions) {
             int r = row + dir[0];
@@ -109,6 +152,17 @@ public class GameController {
     // Core game logic
     // ------------------------------------------------------------
 
+    /**
+     * Hanterar ett spelardrag på angiven position. Om rutan är ledig
+     * placeras den aktuella spelarens pjäs där, överraskningar i alla
+     * åtta riktningar kontrolleras, och om spelet därefter är slut
+     * avslutas det. Annars uppdateras gränssnittet och turen växlas
+     * till nästa spelare.
+     *
+     * @param row raden på den ruta spelaren valde
+     * @param col kolumnen på den ruta spelaren valde
+     * @author Adnan
+     */
     public void buttonPressed(int row, int col) {
         allowSwitchTurn = true;
 
@@ -138,6 +192,21 @@ public class GameController {
         gameView.updateInfoText(currentPlayer.getName() + " Turn to pick a square.");
     }
 
+    /**
+     * Går igenom rutorna i en given riktning, med start en ruta bort
+     * från den nyligen placerade pjäsen, och samlar upp motståndarens
+     * pjäser samt eventuella oaktiverade Mysterium i en kedja. Om
+     * kedjan avslutas med spelarens egen pjäs byter alla insamlade
+     * rutor ägare, och eventuella Mysterium i kedjan aktiveras.
+     *
+     * @param row rad för den ruta spelaren just placerade sin pjäs på
+     * @param col kolumn för den ruta spelaren just placerade sin pjäs på
+     * @param dRow radförflyttning per steg i den riktning som undersöks
+     * @param dCol kolumnförflyttning per steg i den riktning som undersöks
+     * @param currentPlayer spelaren som just gjorde draget
+     * @param otherPlayer motståndaren till den spelare som gjorde draget
+     * @author Adnan
+     */
     private void checkDirection(int row, int col, int dRow, int dCol, Player currentPlayer, Player otherPlayer) {
         List<Tile> tilesToChange = new ArrayList<>();
 
@@ -181,6 +250,15 @@ public class GameController {
         }
     }
 
+    /**
+     * Växlar aktiv spelare, förutsatt att inget Mysterium (t.ex.
+     * Tidshopp) har förhindrat detta för det aktuella draget. Efter
+     * ett normalt byte kontrolleras om den nya aktiva spelaren ska
+     * hoppa över sin tur på grund av ett tidigare Narcissus-Mysterium,
+     * och byter i så fall tillbaka igen.
+     *
+     * @author Adnan
+     */
     public void switchTurns() {
         if (allowSwitchTurn) {
             Player tempPlayer = currentPlayer;
@@ -204,6 +282,14 @@ public class GameController {
     // Game Ending
     // ------------------------------------------------------------
 
+    /**
+     * Hanterar avslutningen av ett spel. Inaktiverar spelplanen,
+     * avgör vinnaren och visar antingen en namnfråga för highscore-
+     * listan (om poängen kvalar in), ett meddelande om att poängen
+     * inte kvalade in, eller ett meddelande om oavgjort resultat.
+     *
+     * @author Adnan
+     */
     private void handleGameOver() {
         gameView.disableBoard();
         Player winner = getMatchWinner();
@@ -223,10 +309,23 @@ public class GameController {
         }
     }
 
+    /**
+     * Kontrollerar om spelet är slut, det vill säga om spelplanen är
+     * full eller om alla utplacerade Mysterium har aktiverats.
+     *
+     * @return true om spelet är slut, annars false
+     * @author Adnan
+     */
     private boolean checkGameOver() {
         return isBoardFull() || allMysteriesActivated();
     }
 
+    /**
+     * Kontrollerar om samtliga rutor på spelplanen är ockuperade.
+     *
+     * @return true om spelplanen är full, annars false
+     * @author Adnan
+     */
     private boolean isBoardFull() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
@@ -238,6 +337,14 @@ public class GameController {
         return true;
     }
 
+    /**
+     * Räknar antalet utplacerade Mysterium som redan har aktiverats
+     * och kontrollerar om samtliga utplacerade Mysterium är aktiverade.
+     *
+     * @return true om alla utplacerade Mysterium har aktiverats,
+     *         annars false
+     * @author Adnan
+     */
     public boolean allMysteriesActivated() {
         int activatedMysteries = 0;
         for (int i = 0; i < tiles.length; i++) {
@@ -250,6 +357,14 @@ public class GameController {
         return activatedMysteries == mysteries;
     }
 
+    /**
+     * Avgör vinnaren av matchen genom att jämföra hur många rutor
+     * respektive spelare kontrollerar på spelplanen.
+     *
+     * @return den spelare som kontrollerar flest rutor, eller null
+     *         om båda spelarna kontrollerar lika många rutor
+     * @author Adnan
+     */
     public Player getMatchWinner() {
         Player p1 = players.getFirst();
         Player p2 = players.getLast();
@@ -267,6 +382,15 @@ public class GameController {
     // Highscore logic
     // ------------------------------------------------------------
 
+    /**
+     * Registrerar den nuvarande spelarens resultat i highscore-listan
+     * under det angivna namnet, och sparar den uppdaterade listan till
+     * fil.
+     *
+     * @param name namnet vinnaren angav för highscore-listan
+     * @return det angivna namnet
+     * @author Adnan
+     */
     public String winnerName(String name) {
         if (name != null) {
             int score = currentPlayer.getAmountOfTilesOccupied();
@@ -276,6 +400,12 @@ public class GameController {
         return name;
     }
 
+    /**
+     * Hämtar highscore-listan formaterad som en läsbar textsträng.
+     *
+     * @return den formaterade highscore-listan
+     * @author Adnan
+     */
     public String getHighscore() {
         return highscore.getFormattedHighscore();
     }
@@ -284,6 +414,14 @@ public class GameController {
     // Game reset logic
     // ------------------------------------------------------------
 
+    /**
+     * Startar om spelet. Skapar en ny, tom spelplan med nya
+     * slumpmässigt utplacerade Mysterium, nollställer båda spelarnas
+     * poäng och turordningsrelaterade tillstånd, samt återställer det
+     * grafiska gränssnittet till startläge.
+     *
+     * @author Adnan
+     */
     public void resetGame() {
         tiles = new Tile[10][10];
         for (int row = 0; row < tiles.length; row++) {
