@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.PlayingField.Highscore.Highscore;
+import Model.Highscore.Highscore;
 import Model.Player.Player;
 import Model.PlayingField.Mysteries.AbyssalRoar;
 import Model.PlayingField.Mysteries.MysteryTile;

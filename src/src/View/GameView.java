@@ -6,6 +6,15 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.*;
 
+/**
+ * Vygränssnittsklass som ansvarar för spelets grafiska gränssnitt.
+ * Bygger upp spelplanens knappar, informations- och statuspaneler samt
+ * popup-fönster för vinnarnamn och highscore. Tar emot uppdateringar
+ * från GameController och vidarebefordrar användarens knapptryckningar
+ * till kontrollklassen.
+ *
+ * @author Adnan
+ */
 public class GameView {
     private JFrame frame;
     private JPanel boardPanel;
@@ -25,6 +34,14 @@ public class GameView {
     // Init
     // ------------------------------------------------------------
 
+    /**
+     * Skapar och visar spelets huvudfönster. Bygger upp den övre panelen,
+     * den nedre panelen och spelplanen samt kopplar samman dessa i
+     * huvudfönstret.
+     *
+     * @param gameController kontrollklassen som vyn ska kommunicera med
+     * @author Adnan
+     */
     public GameView(GameController gameController) {
         this.gameController = gameController;
         frame = new JFrame("The Game");
@@ -43,6 +60,12 @@ public class GameView {
         frame.setVisible(true);
     }
 
+    /**
+     * Bygger upp den övre panelen som visar informationstext till
+     * spelaren samt vilken spelare som har turen.
+     *
+     * @author Adnan
+     */
     private void buildTopPanel() {
         topPanel = new JPanel(new GridLayout(2, 1));
 
@@ -55,6 +78,13 @@ public class GameView {
         topPanel.add(statusLabel);
     }
 
+    /**
+     * Bygger upp den nedre panelen som innehåller knappen för att
+     * starta om spelet. Knappen kopplas till GameControllers metod
+     * för att återställa spelet.
+     *
+     * @author Adnan
+     */
     private void buildBottomPanel() {
         bottomPanel = new JPanel();
         resetButton = new JButton("Reset");
@@ -62,6 +92,14 @@ public class GameView {
         bottomPanel.add(resetButton);
     }
 
+    /**
+     * Bygger upp spelplanen som en 10×10-matris av knappar. Varje knapp
+     * registreras som en ruta hos GameController och tilldelas en
+     * lyssnare som meddelar kontrollklassen om vilken position
+     * spelaren har tryckt på.
+     *
+     * @author Adnan
+     */
     private void buildBoard() {
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(10, 10, 2, 2));
@@ -90,14 +128,37 @@ public class GameView {
     // Status Updates
     // ------------------------------------------------------------
 
+    /**
+     * Uppdaterar texten som visar vilken spelare som för närvarande
+     * har turen.
+     *
+     * @param currentPlayer namnet på den spelare vars tur det är
+     * @author Adnan
+     */
     public void updateCurrentPlayer(String currentPlayer) {
         statusLabel.setText("Current Player: " + currentPlayer);
     }
 
+    /**
+     * Uppdaterar informationstexten som visas för spelaren, exempelvis
+     * felmeddelanden eller instruktioner om nästa drag.
+     *
+     * @param infoText texten som ska visas i informationsfältet
+     * @author Adnan
+     */
     public void updateInfoText(String infoText) {
         infoLabel.setText(infoText);
     }
 
+    /**
+     * Sätter texten (märket) på en given ruta på spelplanen, exempelvis
+     * en spelares symbol eller en bokstav som indikerar ett Mysterium.
+     *
+     * @param row  raden för den ruta som ska märkas
+     * @param col  kolumnen för den ruta som ska märkas
+     * @param mark texten som ska visas på rutan
+     * @author Adnan
+     */
     public void markTile(int row, int col, String mark) {
         boardButtons[row][col].setText(mark);
     }
@@ -106,6 +167,12 @@ public class GameView {
     // Board state
     // ------------------------------------------------------------
 
+    /**
+     * Inaktiverar samtliga knappar på spelplanen, så att spelaren inte
+     * längre kan göra några drag. Används när spelet är slut.
+     *
+     * @author Adnan
+     */
     public void disableBoard() {
         for (int row = 0; row < boardButtons.length; row++) {
             for (int col = 0; col < boardButtons[row].length; col++) {
@@ -114,6 +181,12 @@ public class GameView {
         }
     }
 
+    /**
+     * Aktiverar samtliga knappar på spelplanen igen, så att spelaren
+     * kan göra drag. Används när ett nytt spel startas.
+     *
+     * @author Adnan
+     */
     public void enableBoard() {
         for (int row = 0; row < boardButtons.length; row++) {
             for (int col = 0; col < boardButtons[row].length; col++) {
@@ -126,6 +199,14 @@ public class GameView {
     // Popups
     // ------------------------------------------------------------
 
+    /**
+     * Visar ett popup-fönster där vinnaren kan ange sitt namn för att
+     * registreras i highscore-listan. Om fältet lämnas tomt visas ett
+     * felmeddelande. Vid godkänd inmatning skickas namnet till
+     * GameController och highscore-listan visas därefter.
+     *
+     * @author Adnan
+     */
     public void winnerName() {
         JFrame winnerFrame = new JFrame("Winner");
         winnerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -157,6 +238,13 @@ public class GameView {
         winnerFrame.setVisible(true);
     }
 
+    /**
+     * Visar highscore-listan i ett popup-fönster.
+     *
+     * @param formattedHighscore den färdigformaterade texten som
+     *                            innehåller highscore-listan
+     * @author Adnan
+     */
     public void showHighscore(String formattedHighscore) {
         JOptionPane.showMessageDialog(frame, formattedHighscore, "Highscore", JOptionPane.INFORMATION_MESSAGE);
     }

@@ -1,39 +1,102 @@
 package Model.Player;
 
+/**
+ * Modellklass som representerar en spelare i spelet. Håller reda på
+ * spelarens namn, vilket märke (symbol) spelaren spelar med, hur många
+ * rutor spelaren för närvarande kontrollerar samt om spelaren ska
+ * hoppa över sin nästa tur på grund av ett Narcissus-Mysterium.
+ *
+ * @author Adnan
+ */
 public class Player {
     private String name;
     private String mark;
     private int amountOfTilesOccupied;
     private boolean skipNextTurn = false;
 
+    /**
+     * Skapar en ny spelare med angivet namn och märke.
+     *
+     * @param name namnet på spelaren
+     * @param mark symbolen som spelarens pjäser ska markeras med
+     * @author Adnan
+     */
     public Player(String name, String mark) {
         this.name = name;
         this.mark = mark;
     }
+
+    /**
+     * Hämtar spelarens namn.
+     *
+     * @return spelarens namn
+     * @author Adnan
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Hämtar spelarens märke (symbol).
+     *
+     * @return spelarens märke
+     * @author Adnan
+     */
     public String getMark() {
         return mark;
     }
 
+    /**
+     * Hämtar antalet rutor spelaren för närvarande kontrollerar på
+     * spelplanen.
+     *
+     * @return antalet rutor spelaren kontrollerar
+     * @author Adnan
+     */
     public int getAmountOfTilesOccupied() {
         return amountOfTilesOccupied;
     }
 
+    /**
+     * Räknar upp antalet rutor spelaren kontrollerar med ett, används
+     * när spelaren placerar en ny pjäs på spelplanen.
+     *
+     * @author Adnan
+     */
     public void addOccupiedTile() {
         amountOfTilesOccupied++;
     }
 
-    public void setSkipNextTurn (boolean skipNextTurn) {
+    /**
+     * Anger om spelaren ska hoppa över sin nästa tur, exempelvis till
+     * följd av att Mysteriet Narcissus har aktiverats.
+     *
+     * @param skipNextTurn true om spelaren ska hoppa över nästa tur,
+     *                      annars false
+     * @author Adnan
+     */
+    public void setSkipNextTurn(boolean skipNextTurn) {
         this.skipNextTurn = skipNextTurn;
     }
 
+    /**
+     * Kontrollerar om spelaren ska hoppa över sin nästa tur.
+     *
+     * @return true om spelaren ska hoppa över nästa tur, annars false
+     * @author Adnan
+     */
     public boolean getSkipNextTurn() {
         return skipNextTurn;
     }
 
+    /**
+     * Sätter antalet rutor spelaren kontrollerar till ett angivet
+     * värde. Används bland annat för att nollställa poängen när ett
+     * nytt spel startas.
+     *
+     * @param amount antalet rutor spelaren ska kontrollera
+     * @author Adnan
+     */
     public void setAmountOfOccupiedTiles(int amount) {
         amountOfTilesOccupied = amount;
     }
