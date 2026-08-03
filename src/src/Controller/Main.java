@@ -15,6 +15,7 @@ public class Main {
      *
      * @param args kommandoradsargument (används inte)
      * @author Adnan
+     * @author Joshua
      */
     public static void main(String[] args) {
         GameController gameController = new GameController();

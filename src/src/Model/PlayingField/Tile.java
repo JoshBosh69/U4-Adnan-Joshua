@@ -10,6 +10,7 @@ import Model.PlayingField.Mysteries.MysteryTile;
  * av Mysterium det rör sig om.
  *
  * @author Adnan
+ * @author Joshua
  */
 public class Tile {
     private int xcor;
@@ -25,6 +26,7 @@ public class Tile {
      * @param xcor radens position för rutan
      * @param ycor kolumnens position för rutan
      * @author Adnan
+     * @author Joshua
      */
     public Tile(int xcor, int ycor) {
         this.xcor = xcor;
@@ -36,6 +38,7 @@ public class Tile {
      *
      * @param xcor den nya radpositionen för rutan
      * @author Adnan
+     * @author Joshua
      */
     public void setXcor(int xcor) {
         this.xcor = xcor;
@@ -46,6 +49,7 @@ public class Tile {
      *
      * @return rutans radposition
      * @author Adnan
+     * @author Joshua
      */
     public int getXcor() {
         return xcor;
@@ -56,6 +60,7 @@ public class Tile {
      *
      * @param ycor den nya kolumnpositionen för rutan
      * @author Adnan
+     * @author Joshua
      */
     public void setYcor(int ycor) {
         this.ycor = ycor;
@@ -66,6 +71,7 @@ public class Tile {
      *
      * @return rutans kolumnposition
      * @author Adnan
+     * @author Joshua
      */
     public int getYcor() {
         return ycor;
@@ -76,6 +82,7 @@ public class Tile {
      *
      * @return true om rutan är ockuperad, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean isOccupied() {
         return isOccupied;
@@ -86,6 +93,7 @@ public class Tile {
      *
      * @param occupied true om rutan ska vara ockuperad, annars false
      * @author Adnan
+     * @author Joshua
      */
     public void setOccupied(boolean occupied) {
         isOccupied = occupied;
@@ -96,6 +104,7 @@ public class Tile {
      *
      * @return spelaren som äger rutan, eller null om ingen äger den
      * @author Adnan
+     * @author Joshua
      */
     public Player getOwner() {
         return player;
@@ -106,6 +115,7 @@ public class Tile {
      *
      * @param player spelaren som ska äga rutan
      * @author Adnan
+     * @author Joshua
      */
     public void setOwner(Player player) {
         this.player = player;
@@ -116,6 +126,7 @@ public class Tile {
      *
      * @return true om rutan är ett Mysterium, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean isMystery() {
         return isMystery;
@@ -126,6 +137,7 @@ public class Tile {
      *
      * @param mystery true om rutan ska vara ett Mysterium, annars false
      * @author Adnan
+     * @author Joshua
      */
     public void setIsMystery(boolean mystery) {
         isMystery = mystery;
@@ -137,6 +149,7 @@ public class Tile {
      * @return rutans Mysterium-typ, eller null om rutan inte är ett
      *         Mysterium
      * @author Adnan
+     * @author Joshua
      */
     public MysteryTile getMysteryType() {
         return mystery;
@@ -147,6 +160,7 @@ public class Tile {
      *
      * @param mysteryType det Mysterium som rutan ska tilldelas
      * @author Adnan
+     * @author Joshua
      */
     public void setMysteryType(MysteryTile mysteryType) {
         this.mystery = mysteryType;
@@ -158,6 +172,7 @@ public class Tile {
      *
      * @return true om rutans Mysterium är aktiverat, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean isMysteryActive() {
         return mystery != null && mystery.isActive();

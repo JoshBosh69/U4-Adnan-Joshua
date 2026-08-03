@@ -16,6 +16,7 @@ public class HighscoreEntry {
      * @param name  namnet som ska registreras för resultatet
      * @param score poängen som ska registreras
      * @author Adnan
+     * @author Joshua
      */
     public HighscoreEntry(String name, int score) {
         this.name = name;
@@ -27,6 +28,7 @@ public class HighscoreEntry {
      *
      * @return namnet som registrerats för resultatet
      * @author Adnan
+     * @author Joshua
      */
     public String getName() {
         return name;
@@ -37,6 +39,7 @@ public class HighscoreEntry {
      *
      * @return poängen som registrerats för resultatet
      * @author Adnan
+     * @author Joshua
      */
     public int getScore() {
         return score;

@@ -20,6 +20,7 @@ import java.util.Random;
  * det grafiska gränssnittet.
  *
  * @author Adnan
+ * @author Joshua
  */
 public class GameController {
 
@@ -48,6 +49,7 @@ public class GameController {
      * gränssnittet och placerar ut Mysterium på spelplanen.
      *
      * @author Adnan
+     * @author Joshua
      */
     public GameController() {
         players = new ArrayList<>();
@@ -69,6 +71,7 @@ public class GameController {
      * @param row raden rutan ska registreras på
      * @param col kolumnen rutan ska registreras på
      * @author Adnan
+     * @author Joshua
      */
     public void registerTile(int row, int col) {
         tiles[row][col] = new Tile(row, col);
@@ -82,6 +85,7 @@ public class GameController {
      * angränsande till ett annat Mysterium.
      *
      * @author Adnan
+     * @author Joshua
      */
     private void placeMysteries() {
         Random random = new Random();
@@ -134,6 +138,7 @@ public class GameController {
      * @return true om minst en angränsande ruta innehåller ett
      *         Mysterium, annars false
      * @author Adnan
+     * @author Joshua
      */
     private boolean hasAdjacentMystery(int row, int col) {
         for (int[] dir : directions) {
@@ -162,6 +167,7 @@ public class GameController {
      * @param row raden på den ruta spelaren valde
      * @param col kolumnen på den ruta spelaren valde
      * @author Adnan
+     * @author Joshua
      */
     public void buttonPressed(int row, int col) {
         allowSwitchTurn = true;
@@ -206,6 +212,7 @@ public class GameController {
      * @param currentPlayer spelaren som just gjorde draget
      * @param otherPlayer motståndaren till den spelare som gjorde draget
      * @author Adnan
+     * @author Joshua
      */
     private void checkDirection(int row, int col, int dRow, int dCol, Player currentPlayer, Player otherPlayer) {
         List<Tile> tilesToChange = new ArrayList<>();
@@ -258,6 +265,7 @@ public class GameController {
      * och byter i så fall tillbaka igen.
      *
      * @author Adnan
+     * @author Joshua
      */
     public void switchTurns() {
         if (allowSwitchTurn) {
@@ -289,6 +297,7 @@ public class GameController {
      * inte kvalade in, eller ett meddelande om oavgjort resultat.
      *
      * @author Adnan
+     * @author Joshua
      */
     private void handleGameOver() {
         gameView.disableBoard();
@@ -315,6 +324,7 @@ public class GameController {
      *
      * @return true om spelet är slut, annars false
      * @author Adnan
+     * @author Joshua
      */
     private boolean checkGameOver() {
         return isBoardFull() || allMysteriesActivated();
@@ -325,6 +335,7 @@ public class GameController {
      *
      * @return true om spelplanen är full, annars false
      * @author Adnan
+     * @author Joshua
      */
     private boolean isBoardFull() {
         for (int i = 0; i < tiles.length; i++) {
@@ -344,6 +355,7 @@ public class GameController {
      * @return true om alla utplacerade Mysterium har aktiverats,
      *         annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean allMysteriesActivated() {
         int activatedMysteries = 0;
@@ -364,6 +376,7 @@ public class GameController {
      * @return den spelare som kontrollerar flest rutor, eller null
      *         om båda spelarna kontrollerar lika många rutor
      * @author Adnan
+     * @author Joshua
      */
     public Player getMatchWinner() {
         Player p1 = players.getFirst();
@@ -390,6 +403,7 @@ public class GameController {
      * @param name namnet vinnaren angav för highscore-listan
      * @return det angivna namnet
      * @author Adnan
+     * @author Joshua
      */
     public String winnerName(String name) {
         if (name != null) {
@@ -405,6 +419,7 @@ public class GameController {
      *
      * @return den formaterade highscore-listan
      * @author Adnan
+     * @author Joshua
      */
     public String getHighscore() {
         return highscore.getFormattedHighscore();
@@ -421,6 +436,7 @@ public class GameController {
      * grafiska gränssnittet till startläge.
      *
      * @author Adnan
+     * @author Joshua
      */
     public void resetGame() {
         tiles = new Tile[10][10];

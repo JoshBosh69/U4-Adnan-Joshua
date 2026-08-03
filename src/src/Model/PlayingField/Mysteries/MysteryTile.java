@@ -2,7 +2,6 @@ package Model.PlayingField.Mysteries;
 
 import Model.Player.Player;
 import Model.PlayingField.Tile;
-
 import java.util.List;
 
 /**
@@ -13,6 +12,7 @@ import java.util.List;
  * sätt.
  *
  * @author Adnan
+ * @author Joshua
  */
 public interface MysteryTile {
 
@@ -36,6 +36,7 @@ public interface MysteryTile {
      * @return true om aktuell spelare ska fortsätta ha sin tur efter
      *         aktiveringen, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles);
 
@@ -45,6 +46,7 @@ public interface MysteryTile {
      *
      * @return true om Mysteriet är aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean isActive();
 
@@ -53,6 +55,7 @@ public interface MysteryTile {
      *
      * @param status true om Mysteriet ska vara aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     public void setIsActive(boolean status);
 }

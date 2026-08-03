@@ -2,7 +2,6 @@ package Model.PlayingField.Mysteries;
 
 import Model.Player.Player;
 import Model.PlayingField.Tile;
-
 import java.util.List;
 
 /**
@@ -11,6 +10,7 @@ import java.util.List;
  * nästa tur.
  *
  * @author Adnan
+ * @author Joshua
  */
 public class Narcissus implements MysteryTile {
     private boolean isActive;
@@ -20,6 +20,7 @@ public class Narcissus implements MysteryTile {
      * (ej aktiverat).
      *
      * @author Adnan
+     * @author Joshua
      */
     public Narcissus() {
         isActive = true;
@@ -44,6 +45,7 @@ public class Narcissus implements MysteryTile {
      *         turen sker först nästa gång turen skulle växla till
      *         spelaren)
      * @author Adnan
+     * @author Joshua
      */
     @Override
     public boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles) {
@@ -57,6 +59,7 @@ public class Narcissus implements MysteryTile {
      *
      * @return true om Mysteriet är aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean isActive() {
         return isActive;
@@ -67,6 +70,7 @@ public class Narcissus implements MysteryTile {
      *
      * @param status true om Mysteriet ska vara aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     @Override
     public void setIsActive(boolean status) {

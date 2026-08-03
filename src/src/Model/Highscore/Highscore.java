@@ -11,6 +11,7 @@ import java.util.List;
  * topp-10-listan samt läsa och skriva listan till en textfil.
  *
  * @author Adnan
+ * @author Joshua
  */
 public class Highscore {
     private List<HighscoreEntry> entries = new ArrayList<>();
@@ -21,6 +22,7 @@ public class Highscore {
      *
      * @param filename namnet på filen som listan ska sparas till
      * @author Adnan
+     * @author Joshua
      */
     public void saveToFile(String filename) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
@@ -38,6 +40,7 @@ public class Highscore {
      *
      * @param filename namnet på filen som listan ska läsas in från
      * @author Adnan
+     * @author Joshua
      */
     public void loadFromFile(String filename) {
         entries.clear();
@@ -66,6 +69,7 @@ public class Highscore {
      * @param name  namnet som ska registreras för resultatet
      * @param score poängen som ska registreras
      * @author Adnan
+     * @author Joshua
      */
     public void addEntry(String name, int score) {
         entries.add(new HighscoreEntry(name, score));
@@ -81,6 +85,7 @@ public class Highscore {
      * med hjälp av en enkel bubbelsortering.
      *
      * @author Adnan
+     * @author Joshua
      */
     private void sortEntries() {
         for (int i = 0; i < entries.size() - 1; i++) {
@@ -104,6 +109,7 @@ public class Highscore {
      * @param score poängen som ska kontrolleras
      * @return true om resultatet kvalificerar in på listan, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean qualifies(int score) {
         if (entries.size() < 10) {
@@ -119,6 +125,7 @@ public class Highscore {
      *
      * @return listan med highscore-poster
      * @author Adnan
+     * @author Joshua
      */
     public List<HighscoreEntry> getEntries() {
         return entries;
@@ -131,6 +138,7 @@ public class Highscore {
      *
      * @return den formaterade highscore-listan som en textsträng
      * @author Adnan
+     * @author Joshua
      */
     public String getFormattedHighscore() {
         String highScore = "";

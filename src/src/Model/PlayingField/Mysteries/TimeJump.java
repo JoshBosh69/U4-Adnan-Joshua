@@ -2,7 +2,6 @@ package Model.PlayingField.Mysteries;
 
 import Model.Player.Player;
 import Model.PlayingField.Tile;
-
 import java.util.List;
 
 /**
@@ -11,6 +10,7 @@ import java.util.List;
  * turen växlas inte till motståndaren efter draget.
  *
  * @author Adnan
+ * @author Joshua
  */
 public class TimeJump implements MysteryTile {
     private boolean isActive;
@@ -20,6 +20,7 @@ public class TimeJump implements MysteryTile {
      * (ej aktiverat).
      *
      * @author Adnan
+     * @author Joshua
      */
     public TimeJump() {
         isActive = true;
@@ -43,6 +44,7 @@ public class TimeJump implements MysteryTile {
      * @return false, eftersom turen inte ska växla till motståndaren
      *         efter aktiveringen
      * @author Adnan
+     * @author Joshua
      */
     @Override
     public boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles) {
@@ -55,6 +57,7 @@ public class TimeJump implements MysteryTile {
      *
      * @return true om Mysteriet är aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean isActive() {
         return isActive;
@@ -65,6 +68,7 @@ public class TimeJump implements MysteryTile {
      *
      * @param status true om Mysteriet ska vara aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     @Override
     public void setIsActive(boolean status) {

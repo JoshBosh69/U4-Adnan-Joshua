@@ -2,7 +2,6 @@ package Model.PlayingField.Mysteries;
 
 import Model.Player.Player;
 import Model.PlayingField.Tile;
-
 import java.util.List;
 
 /**
@@ -12,6 +11,7 @@ import java.util.List;
  * ockuperingsstatus.
  *
  * @author Adnan
+ * @author Joshua
  */
 public class AbyssalRoar implements MysteryTile {
     private boolean isActive;
@@ -21,6 +21,7 @@ public class AbyssalRoar implements MysteryTile {
      * (ej aktiverat).
      *
      * @author Adnan
+     * @author Joshua
      */
     public AbyssalRoar() {
         isActive = true;
@@ -46,6 +47,7 @@ public class AbyssalRoar implements MysteryTile {
      * @return true, eftersom aktuell spelare ska fortsätta ha sin tur
      *         som vanligt efter aktiveringen
      * @author Adnan
+     * @author Joshua
      */
     @Override
     public boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles) {
@@ -72,6 +74,7 @@ public class AbyssalRoar implements MysteryTile {
      *
      * @return true om Mysteriet är aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     public boolean isActive() {
         return isActive;
@@ -82,6 +85,7 @@ public class AbyssalRoar implements MysteryTile {
      *
      * @param status true om Mysteriet ska vara aktivt, annars false
      * @author Adnan
+     * @author Joshua
      */
     @Override
     public void setIsActive(boolean status) {

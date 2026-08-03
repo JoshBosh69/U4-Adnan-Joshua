@@ -14,6 +14,7 @@ import javax.swing.*;
  * till kontrollklassen.
  *
  * @author Adnan
+ * @author Joshua
  */
 public class GameView {
     private JFrame frame;
@@ -41,6 +42,7 @@ public class GameView {
      *
      * @param gameController kontrollklassen som vyn ska kommunicera med
      * @author Adnan
+     * @author Joshua
      */
     public GameView(GameController gameController) {
         this.gameController = gameController;
@@ -65,6 +67,7 @@ public class GameView {
      * spelaren samt vilken spelare som har turen.
      *
      * @author Adnan
+     * @author Joshua
      */
     private void buildTopPanel() {
         topPanel = new JPanel(new GridLayout(2, 1));
@@ -84,6 +87,7 @@ public class GameView {
      * för att återställa spelet.
      *
      * @author Adnan
+     * @author Joshua
      */
     private void buildBottomPanel() {
         bottomPanel = new JPanel();
@@ -99,6 +103,7 @@ public class GameView {
      * spelaren har tryckt på.
      *
      * @author Adnan
+     * @author Joshua
      */
     private void buildBoard() {
         boardPanel = new JPanel();
@@ -134,6 +139,7 @@ public class GameView {
      *
      * @param currentPlayer namnet på den spelare vars tur det är
      * @author Adnan
+     * @author Joshua
      */
     public void updateCurrentPlayer(String currentPlayer) {
         statusLabel.setText("Current Player: " + currentPlayer);
@@ -145,6 +151,7 @@ public class GameView {
      *
      * @param infoText texten som ska visas i informationsfältet
      * @author Adnan
+     * @author Joshua
      */
     public void updateInfoText(String infoText) {
         infoLabel.setText(infoText);
@@ -158,6 +165,7 @@ public class GameView {
      * @param col  kolumnen för den ruta som ska märkas
      * @param mark texten som ska visas på rutan
      * @author Adnan
+     * @author Joshua
      */
     public void markTile(int row, int col, String mark) {
         boardButtons[row][col].setText(mark);
@@ -172,6 +180,7 @@ public class GameView {
      * längre kan göra några drag. Används när spelet är slut.
      *
      * @author Adnan
+     * @author Joshua
      */
     public void disableBoard() {
         for (int row = 0; row < boardButtons.length; row++) {
@@ -186,6 +195,7 @@ public class GameView {
      * kan göra drag. Används när ett nytt spel startas.
      *
      * @author Adnan
+     * @author Joshua
      */
     public void enableBoard() {
         for (int row = 0; row < boardButtons.length; row++) {
@@ -206,6 +216,7 @@ public class GameView {
      * GameController och highscore-listan visas därefter.
      *
      * @author Adnan
+     * @author Joshua
      */
     public void winnerName() {
         JFrame winnerFrame = new JFrame("Winner");
@@ -244,6 +255,7 @@ public class GameView {
      * @param formattedHighscore den färdigformaterade texten som
      *                            innehåller highscore-listan
      * @author Adnan
+     * @author Joshua
      */
     public void showHighscore(String formattedHighscore) {
         JOptionPane.showMessageDialog(frame, formattedHighscore, "Highscore", JOptionPane.INFORMATION_MESSAGE);
