@@ -118,13 +118,7 @@ public class GameController {
             }
             tiles[randomRow][randomCol].setIsMystery(true);
 
-            if (mysteryIndex == 0) {
-                gameView.markTile(randomRow, randomCol, "T");
-            } else if (mysteryIndex == 2) {
-                gameView.markTile(randomRow, randomCol, "N");
-            } else {
-                gameView.markTile(randomRow, randomCol, "A");
-            }
+            gameView.markTile(randomRow, randomCol, "M");
             placedMysteries++;
         }
     }
@@ -159,10 +153,12 @@ public class GameController {
 
     /**
      * Hanterar ett spelardrag på angiven position. Om rutan är ledig
-     * placeras den aktuella spelarens pjäs där, överraskningar i alla
-     * åtta riktningar kontrolleras, och om spelet därefter är slut
-     * avslutas det. Annars uppdateras gränssnittet och turen växlas
-     * till nästa spelare.
+     * och placeringen är giltig (spelarens första drag i spelomgången,
+     * eller en position som angränsar till en redan placerad pjäs
+     * eller ett Mysterium) placeras den aktuella spelarens pjäs där,
+     * överraskningar i alla åtta riktningar kontrolleras, och om
+     * spelet därefter är slut avslutas det. Annars uppdateras
+     * gränssnittet och turen växlas till nästa spelare.
      *
      * @param row raden på den ruta spelaren valde
      * @param col kolumnen på den ruta spelaren valde
@@ -177,8 +173,14 @@ public class GameController {
             return;
         }
 
+        if (currentPlayer.hasPlacedFirstTile() && !isAdjacentToPieceOrMystery(row, col)) {
+            gameView.updateInfoText("You need to place your piece next to another piece or next to a Mystery.");
+            return;
+        }
+
         tiles[row][col].setOccupied(true);
         tiles[row][col].setOwner(currentPlayer);
+        currentPlayer.setHasPlacedFirstTile(true);
 
         for (int[] dir : directions) {
             checkDirection(row, col, dir[0], dir[1], currentPlayer, otherPlayer);
@@ -284,6 +286,34 @@ public class GameController {
         } else {
             gameView.updateInfoText("TimeJump! " + currentPlayer.getName() + " get to play again");
         }
+    }
+
+    /**
+     * Kontrollerar om någon av de åtta angränsande rutorna runt en
+     * given position innehåller en placerad pjäs eller ett Mysterium.
+     * Används för att avgöra om en spelare får placera en ny pjäs på
+     * angiven position, förutom vid spelarens första drag i
+     * spelomgången då detta krav inte gäller.
+     *
+     * @param row raden som ska kontrolleras
+     * @param col kolumnen som ska kontrolleras
+     * @return true om minst en angränsande ruta är ockuperad eller
+     *         innehåller ett Mysterium, annars false
+     * @author Adnan
+     * @author Joshua
+     */
+    private boolean isAdjacentToPieceOrMystery(int row, int col) {
+        for (int[] dir : directions) {
+            int r = row + dir[0];
+            int c = col + dir[1];
+            if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[0].length) {
+                Tile neighbor = tiles[r][c];
+                if (neighbor.isOccupied() || neighbor.isMystery()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // ------------------------------------------------------------
@@ -432,7 +462,8 @@ public class GameController {
     /**
      * Startar om spelet. Skapar en ny, tom spelplan med nya
      * slumpmässigt utplacerade Mysterium, nollställer båda spelarnas
-     * poäng och turordningsrelaterade tillstånd, samt återställer det
+     * poäng, turordningsrelaterade tillstånd samt information om
+     * huruvida spelaren gjort sitt första drag, samt återställer det
      * grafiska gränssnittet till startläge.
      *
      * @author Adnan
@@ -453,6 +484,7 @@ public class GameController {
         for (Player p : players) {
             p.setAmountOfOccupiedTiles(0);
             p.setSkipNextTurn(false);
+            p.setHasPlacedFirstTile(false);
         }
 
         currentPlayer = players.getFirst();

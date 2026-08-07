@@ -14,6 +14,8 @@ public class Player {
     private String mark;
     private int amountOfTilesOccupied;
     private boolean skipNextTurn = false;
+    private boolean hasPlacedFirstTile = false;
+
 
     /**
      * Skapar en ny spelare med angivet namn och märke.
@@ -108,5 +110,31 @@ public class Player {
      */
     public void setAmountOfOccupiedTiles(int amount) {
         amountOfTilesOccupied = amount;
+    }
+
+    /**
+     * Anger om spelaren redan har gjort sitt första drag i den
+     * aktuella spelomgången.
+     *
+     * @return true om spelaren har placerat sin första pjäs,
+     *         annars false
+     * @author Adnan
+     * @author Joshua
+     */
+    public boolean hasPlacedFirstTile() {
+        return hasPlacedFirstTile;
+    }
+
+    /**
+     * Anger om spelaren har gjort sitt första drag i den aktuella
+     * spelomgången.
+     *
+     * @param value true om spelaren har placerat sin första pjäs,
+     *              annars false
+     * @author Adnan
+     * @author Joshua
+     */
+    public void setHasPlacedFirstTile(boolean value) {
+        hasPlacedFirstTile = value;
     }
 }
