@@ -77,4 +77,17 @@ public class Narcissus implements MysteryTile {
         isActive = status;
     }
 
+    /**
+     * Hämtar Mysteriets namn, för visning för spelaren när
+     * Mysteriet aktiveras.
+     *
+     * @return Mysteriets namn
+     * @author Adnan
+     * @author Joshua
+     */
+    @Override
+    public String getName() {
+        return "Narcissus";
+    }
+
 }

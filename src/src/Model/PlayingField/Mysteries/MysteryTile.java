@@ -38,7 +38,7 @@ public interface MysteryTile {
      * @author Adnan
      * @author Joshua
      */
-    public boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles);
+    boolean activateMystery(Player currentPlayer, Player otherPlayer, int row, int col, Tile[][] tiles, int[][] directions, List<Tile> affectedTiles);
 
     /**
      * Kontrollerar om Mysteriet är aktivt, det vill säga om det ännu
@@ -48,7 +48,7 @@ public interface MysteryTile {
      * @author Adnan
      * @author Joshua
      */
-    public boolean isActive();
+    boolean isActive();
 
     /**
      * Anger Mysteriets aktiveringsstatus.
@@ -57,5 +57,15 @@ public interface MysteryTile {
      * @author Adnan
      * @author Joshua
      */
-    public void setIsActive(boolean status);
+    void setIsActive(boolean status);
+
+    /**
+     * Hämtar Mysteriets namn, för visning för spelaren när
+     * Mysteriet aktiveras.
+     *
+     * @return Mysteriets namn
+     * @author Adnan
+     * @author Joshua
+     */
+    String getName();
 }

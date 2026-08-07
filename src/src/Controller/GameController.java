@@ -205,7 +205,9 @@ public class GameController {
      * från den nyligen placerade pjäsen, och samlar upp motståndarens
      * pjäser samt eventuella oaktiverade Mysterium i en kedja. Om
      * kedjan avslutas med spelarens egen pjäs byter alla insamlade
-     * rutor ägare, och eventuella Mysterium i kedjan aktiveras.
+     * rutor ägare. Om kedjan enbart innehåller egna pjäser och
+     * Mysterium (ingen motståndarpjäs) aktiveras eventuella Mysterium
+     * i kedjan, och en popup visar vilken typ som aktiverades.
      *
      * @param row rad för den ruta spelaren just placerade sin pjäs på
      * @param col kolumn för den ruta spelaren just placerade sin pjäs på
@@ -231,6 +233,7 @@ public class GameController {
                 tilesToChange.add(currentTile);
             } else if (currentTile.getOwner() == currentPlayer) {
                 if (!tilesToChange.isEmpty()) {
+
                     for (Tile t : tilesToChange) {
                         t.setOwner(currentPlayer);
 
@@ -238,7 +241,9 @@ public class GameController {
                             MysteryTile mystery = t.getMysteryType();
                             List<Tile> affectedTiles = new ArrayList<>();
 
+
                             allowSwitchTurn = mystery.activateMystery(currentPlayer, otherPlayer, t.getXcor(), t.getYcor(), tiles, directions, affectedTiles);
+                            gameView.showMysteryActivated(mystery.getName());
                             mystery.setIsActive(false);
 
                             for (Tile affected : affectedTiles) {

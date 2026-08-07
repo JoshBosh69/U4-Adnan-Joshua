@@ -260,4 +260,16 @@ public class GameView {
     public void showHighscore(String formattedHighscore) {
         JOptionPane.showMessageDialog(frame, formattedHighscore, "Highscore", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    /**
+     * Visar en popup som informerar spelaren om vilken typ av
+     * Mysterium som just aktiverades.
+     *
+     * @param mysteryName namnet på det Mysterium som aktiverades
+     * @author Adnan
+     * @author Joshua
+     */
+    public void showMysteryActivated(String mysteryName) {
+        JOptionPane.showMessageDialog(frame, "Mysterium aktiverat: " + mysteryName, "Mysterium", JOptionPane.INFORMATION_MESSAGE);
+    }
 }
