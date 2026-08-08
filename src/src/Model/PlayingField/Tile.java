@@ -19,6 +19,8 @@ public class Tile {
     private boolean isMystery = false;
     private MysteryTile mystery;
     private Player player;
+    private boolean wasEverMystery = false;
+
 
     /**
      * Skapar en ny, tom ruta på angiven position.
@@ -176,5 +178,36 @@ public class Tile {
      */
     public boolean isMysteryActive() {
         return mystery != null && mystery.isActive();
+    }
+
+    /**
+     * Anger om rutan någon gång har innehållit ett Mysterium, oavsett
+     * om Mysteriet fortfarande kan aktiveras eller redan har
+     * aktiverats. Används för att räkna hur många av de utplacerade
+     * Mysterierna som har aktiverats, till skillnad från isMystery()
+     * som stängs av permanent så snart ett Mysterium aktiverats för
+     * att förhindra återaktivering.
+     *
+     * @return true om rutan någon gång har innehållit ett Mysterium,
+     *         annars false
+     * @author Adnan
+     * @author Joshua
+     */
+    public boolean wasEverMystery() {
+        return wasEverMystery;
+    }
+
+    /**
+     * Anger om rutan någon gång har innehållit ett Mysterium. Denna
+     * flagga sätts vid utplacering och ändras aldrig därefter, till
+     * skillnad från isMystery() som stängs av när Mysteriet aktiveras.
+     *
+     * @param value true om rutan innehåller eller har innehållit ett
+     *              Mysterium, annars false
+     * @author Adnan
+     * @author Joshua
+     */
+    public void setWasEverMystery(boolean value) {
+        wasEverMystery = value;
     }
 }

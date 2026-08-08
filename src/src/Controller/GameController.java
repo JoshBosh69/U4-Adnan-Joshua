@@ -117,6 +117,7 @@ public class GameController {
                     break;
             }
             tiles[randomRow][randomCol].setIsMystery(true);
+            tiles[randomRow][randomCol].setWasEverMystery(true);
 
             gameView.markTile(randomRow, randomCol, "M");
             placedMysteries++;
@@ -173,6 +174,11 @@ public class GameController {
             return;
         }
 
+        if (tiles[row][col].isMystery()) {
+            gameView.updateInfoText("You cant place your piece on a Mystery. Pinch it instead.");
+            return;
+        }
+
         if (currentPlayer.hasPlacedFirstTile() && !isAdjacentToPieceOrMystery(row, col)) {
             gameView.updateInfoText("You need to place your piece next to another piece or next to a Mystery.");
             return;
@@ -204,10 +210,11 @@ public class GameController {
      * Går igenom rutorna i en given riktning, med start en ruta bort
      * från den nyligen placerade pjäsen, och samlar upp motståndarens
      * pjäser samt eventuella oaktiverade Mysterium i en kedja. Om
-     * kedjan avslutas med spelarens egen pjäs byter alla insamlade
-     * rutor ägare. Om kedjan enbart innehåller egna pjäser och
-     * Mysterium (ingen motståndarpjäs) aktiveras eventuella Mysterium
-     * i kedjan, och en popup visar vilken typ som aktiverades.
+     * kedjan avslutas med spelarens egen pjäs byter fiendepjäser i
+     * kedjan ägare. Om kedjan enbart innehåller egna pjäser och ett
+     * oaktiverat Mysterium (ingen motståndarpjäs) aktiveras Mysteriet,
+     * och en popup visar vilken typ som aktiverades. Ett redan
+     * aktiverat Mysterium behandlas som en vanlig fångad ruta.
      *
      * @param row rad för den ruta spelaren just placerade sin pjäs på
      * @param col kolumn för den ruta spelaren just placerade sin pjäs på
@@ -242,15 +249,17 @@ public class GameController {
                     }
 
                     for (Tile t : tilesToChange) {
-                        if (t.isMystery()) {
+                        if (t.isMystery() && t.isMysteryActive()) {
                             if (!hasEnemyTile) {
                                 t.setOwner(currentPlayer);
+                                t.setOccupied(true);
 
                                 MysteryTile mystery = t.getMysteryType();
                                 List<Tile> affectedTiles = new ArrayList<>();
 
                                 allowSwitchTurn = mystery.activateMystery(currentPlayer, otherPlayer, t.getXcor(), t.getYcor(), tiles, directions, affectedTiles);
                                 mystery.setIsActive(false);
+                                t.setIsMystery(false);
                                 gameView.showMysteryActivated(mystery.getName());
 
                                 for (Tile affected : affectedTiles) {
@@ -259,10 +268,11 @@ public class GameController {
 
                                 gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());
                             }
-                            // om hasEnemyTile är true: rör INTE Mysteriet alls —
+                            // om hasEnemyTile är true: rör INTE Mysteriet alls, förblir "M", oaktiverat
                         } else {
-                            // vanlig fiendepjäs, fångas alltid, oavsett Mysterium i kedjan
+                            // vanlig fiendepjäs, eller ett redan aktiverat Mysterium,  fångas alltid
                             t.setOwner(currentPlayer);
+                            t.setOccupied(true);
                             gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());
                         }
                     }
@@ -409,7 +419,7 @@ public class GameController {
         int activatedMysteries = 0;
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
-                if (tiles[i][j].isMystery() && !tiles[i][j].isMysteryActive()) {
+                if (tiles[i][j].wasEverMystery() && !tiles[i][j].isMysteryActive()) {
                     activatedMysteries++;
                 }
             }

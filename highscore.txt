@@ -1,2 +1,2 @@
-adnan,9
-test,6
+adnan,8
+adnan,7
