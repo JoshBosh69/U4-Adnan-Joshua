@@ -233,25 +233,38 @@ public class GameController {
                 tilesToChange.add(currentTile);
             } else if (currentTile.getOwner() == currentPlayer) {
                 if (!tilesToChange.isEmpty()) {
+                    boolean hasEnemyTile = false;
+                    for (Tile t : tilesToChange) {
+                        if (!t.isMystery()) {
+                            hasEnemyTile = true;
+                            break;
+                        }
+                    }
 
                     for (Tile t : tilesToChange) {
-                        t.setOwner(currentPlayer);
+                        if (t.isMystery()) {
+                            if (!hasEnemyTile) {
+                                t.setOwner(currentPlayer);
 
-                        if (t.isMystery() && t.isMysteryActive()) {
-                            MysteryTile mystery = t.getMysteryType();
-                            List<Tile> affectedTiles = new ArrayList<>();
+                                MysteryTile mystery = t.getMysteryType();
+                                List<Tile> affectedTiles = new ArrayList<>();
 
+                                allowSwitchTurn = mystery.activateMystery(currentPlayer, otherPlayer, t.getXcor(), t.getYcor(), tiles, directions, affectedTiles);
+                                mystery.setIsActive(false);
+                                gameView.showMysteryActivated(mystery.getName());
 
-                            allowSwitchTurn = mystery.activateMystery(currentPlayer, otherPlayer, t.getXcor(), t.getYcor(), tiles, directions, affectedTiles);
-                            gameView.showMysteryActivated(mystery.getName());
-                            mystery.setIsActive(false);
+                                for (Tile affected : affectedTiles) {
+                                    gameView.markTile(affected.getXcor(), affected.getYcor(), "");
+                                }
 
-                            for (Tile affected : affectedTiles) {
-                                gameView.markTile(affected.getXcor(), affected.getYcor(), "");
+                                gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());
                             }
+                            // om hasEnemyTile är true: rör INTE Mysteriet alls —
+                        } else {
+                            // vanlig fiendepjäs, fångas alltid, oavsett Mysterium i kedjan
+                            t.setOwner(currentPlayer);
+                            gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());
                         }
-
-                        gameView.markTile(t.getXcor(), t.getYcor(), currentPlayer.getMark());
                     }
                 }
                 return;
